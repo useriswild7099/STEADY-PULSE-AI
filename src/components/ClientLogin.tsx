@@ -28,7 +28,9 @@ export function ClientLogin() {
 
 
   const handleSocialLogin = (provider: 'google' | 'linkedin') => {
-    window.location.href = `http://localhost:5000/api/auth/${provider}`;
+    // Dynamically get API URL from the config or current origin fallback
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    window.location.href = `${API_URL}/auth/${provider}`;
   };
 
   return (

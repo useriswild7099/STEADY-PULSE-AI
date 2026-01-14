@@ -22,18 +22,18 @@ export function Navigation() {
 
             {/* Nav Links */}
             <div className="hidden md:flex items-center gap-1">
-              <a
-                href="#features"
+              <button
+                onClick={() => navigate('/features')}
                 className="px-4 py-2 text-gray-600 hover:text-black transition-all hover:bg-black/5 rounded-full"
               >
                 Services
-              </a>
-              <a
-                href="#workflow"
+              </button>
+              <button
+                onClick={() => navigate('/changelog')}
                 className="px-4 py-2 text-gray-600 hover:text-black transition-all hover:bg-black/5 rounded-full"
               >
                 How It Works
-              </a>
+              </button>
               <button
                 onClick={() => navigate('/pricing')}
                 className="px-4 py-2 text-gray-600 hover:text-black transition-all hover:bg-black/5 rounded-full"

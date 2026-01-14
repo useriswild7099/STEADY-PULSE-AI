@@ -16,7 +16,7 @@ const generateToken = (user: any) => {
 router.get('/google', (req, res) => {
     if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CALLBACK_URL) {
         console.error('Missing Google OAuth Credentials');
-        const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+        const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
         return res.redirect(`${clientUrl}/client-login?error=Server_Config_Error`);
     }
     console.log('Initiating Google Auth with Client ID:', process.env.GOOGLE_CLIENT_ID);
@@ -74,7 +74,7 @@ router.get('/google/callback', async (req, res) => {
 
         const token = generateToken(user);
 
-        const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+        const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
         const redirectUrl = `${clientUrl}/client-portal?token=${token}&user=${encodeURIComponent(JSON.stringify({ id: user._id, email: user.email, role: user.role }))}`;
         console.log('Redirecting to:', redirectUrl);
 
@@ -86,7 +86,7 @@ router.get('/google/callback', async (req, res) => {
         if (err.response) {
             console.error('Response data:', err.response.data);
         }
-        const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+        const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
         res.redirect(`${clientUrl}/client-login?error=Google_Auth_Failed`);
     }
 });
@@ -96,7 +96,7 @@ router.get('/google/callback', async (req, res) => {
 router.get('/linkedin', (req, res) => {
     if (!process.env.LINKEDIN_CLIENT_ID || !process.env.LINKEDIN_CALLBACK_URL) {
         console.error('Missing LinkedIn OAuth Credentials');
-        const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+        const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
         return res.redirect(`${clientUrl}/client-login?error=Server_Config_Error`);
     }
     const redirectUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${process.env.LINKEDIN_CLIENT_ID}&redirect_uri=${process.env.LINKEDIN_CALLBACK_URL}&scope=openid%20profile%20email`;
@@ -153,12 +153,12 @@ router.get('/linkedin/callback', async (req, res) => {
         }
 
         const token = generateToken(user);
-        const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+        const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
         res.redirect(`${clientUrl}/client-portal?token=${token}&user=${encodeURIComponent(JSON.stringify({ id: user._id, email: user.email, role: user.role }))}`);
 
     } catch (err) {
         console.error('LinkedIn Auth Error:', err);
-        const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+        const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
         res.redirect(`${clientUrl}/client-login?error=LinkedIn_Auth_Failed`);
     }
 });

@@ -30,10 +30,10 @@ export function AuroraFooter() {
           <div>
             <h3 className="text-white/90 mb-4 tracking-wide">Product</h3>
             <ul className="space-y-3">
-              <li><a href="#" className="text-gray-500 hover:text-white transition-colors text-sm">Features</a></li>
+              <li><Link to="/features" className="text-gray-500 hover:text-white transition-colors text-sm">Features</Link></li>
               <li><Link to="/pricing" className="text-gray-500 hover:text-white transition-colors text-sm">Pricing</Link></li>
-              <li><a href="#" className="text-gray-500 hover:text-white transition-colors text-sm">Security</a></li>
-              <li><a href="#" className="text-gray-500 hover:text-white transition-colors text-sm">Changelog</a></li>
+              <li><Link to="/security" className="text-gray-500 hover:text-white transition-colors text-sm">Security</Link></li>
+              <li><Link to="/changelog" className="text-gray-500 hover:text-white transition-colors text-sm">Changelog</Link></li>
             </ul>
           </div>
 
@@ -41,7 +41,7 @@ export function AuroraFooter() {
           <div>
             <h3 className="text-white/90 mb-4 tracking-wide">Company</h3>
             <ul className="space-y-3">
-              <li><a href="#" className="text-gray-500 hover:text-white transition-colors text-sm">About</a></li>
+              <li><a href="https://www.linkedin.com/in/prince-tigga-95b123324" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-white transition-colors text-sm">About</a></li>
               <li><a href="#" className="text-gray-500 hover:text-white transition-colors text-sm">Blog</a></li>
               <li><a href="#" className="text-gray-500 hover:text-white transition-colors text-sm">Careers</a></li>
               <li><a href="#" className="text-gray-500 hover:text-white transition-colors text-sm">Contact</a></li>

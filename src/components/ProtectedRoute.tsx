@@ -7,6 +7,27 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children, role }: ProtectedRouteProps) {
     const location = useLocation();
+    
+    // Check for token in URL (Social Login Redirect)
+    const searchParams = new URLSearchParams(location.search);
+    const urlToken = searchParams.get('token');
+    const urlUser = searchParams.get('user');
+
+    if (urlToken && urlUser) {
+        try {
+            // Validate user string is valid JSON before saving
+            JSON.parse(urlUser); // This will throw if invalid
+            
+            localStorage.setItem('token', urlToken);
+            localStorage.setItem('user', urlUser);
+            
+            // Clean URL
+            window.history.replaceState({}, document.title, location.pathname);
+        } catch (e) {
+            console.error('Failed to parse user from URL', e);
+        }
+    }
+
     const token = localStorage.getItem('token');
     const userStr = localStorage.getItem('user');
 

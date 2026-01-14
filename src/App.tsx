@@ -1,7 +1,6 @@
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { Navigation } from './components/Navigation';
 import { AuroraHero } from './components/AuroraHero';
-import { GlassFeatures } from './components/GlassFeatures';
 import AboutUs from './components/AboutUs';
 import { FloatingWorkflow } from './components/FloatingWorkflow';
 import { ImmersiveCTA } from './components/ImmersiveCTA';
@@ -10,19 +9,20 @@ import { ClientLogin } from './components/ClientLogin';
 import { AdminLogin } from './components/AdminLogin';
 import { ClientPortal } from './components/ClientPortal';
 import { AdminPortal } from './components/AdminPortal';
-import { LoadingScreen } from './components/LoadingScreen';
 import { PrivacyPolicy } from './components/PrivacyPolicy';
 import { TermsOfService } from './components/TermsOfService';
 import { FAQ } from './components/FAQ';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Pricing } from './components/Pricing';
+import { FeaturesPage } from './components/FeaturesPage';
+import { SecurityPage } from './components/SecurityPage';
+import { ChangelogPage } from './components/ChangelogPage';
 
 function Home() {
   return (
     <div className="min-h-screen bg-[#FCFCFD] overflow-x-hidden">
       <Navigation />
       <AuroraHero />
-      <GlassFeatures />
       <AboutUs />
       <FAQ />
       <FloatingWorkflow />
@@ -54,7 +54,10 @@ export default function App() {
       <Route path="/" element={<Home />} />
       
       {/* Public Pages */}
+      <Route path="/features" element={<FeaturesPage />} />
       <Route path="/pricing" element={<Pricing />} />
+      <Route path="/security" element={<SecurityPage />} />
+      <Route path="/changelog" element={<ChangelogPage />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-of-service" element={<TermsOfService />} />
 

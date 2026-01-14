@@ -1,6 +1,13 @@
 import { Check, ArrowRight, Zap, Shield, Lock, User, Target, BarChart3, FileText } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
 
 export function Pricing() {
+  const navigate = useNavigate();
+
+  const handleApply = () => {
+    navigate('/client-login', { state: { isSignup: true } });
+  };
+
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden pt-20">
       {/* Animated Background Effects */}
@@ -26,7 +33,10 @@ export function Pricing() {
             Zero cost. Maximum impact.
           </p>
 
-          <button className="group relative bg-blue-500 hover:bg-blue-600 text-white px-12 py-6 rounded-full text-lg font-bold transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.5)]">
+          <button 
+            onClick={handleApply}
+            className="group relative bg-blue-500 hover:bg-blue-600 text-white px-12 py-6 rounded-full text-lg font-bold transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.5)]"
+          >
             <span className="flex items-center gap-3">
               Find Out If It's Worth It
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -113,7 +123,10 @@ export function Pricing() {
                   <span className="text-6xl font-bold">$0</span>
                 </div>
                 <p className="text-gray-400 mb-8">No credit card. No obligations. Just pure value.</p>
-                <button className="w-full md:w-auto bg-blue-500 hover:bg-blue-600 text-white px-16 py-5 rounded-full text-lg font-bold transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.5)]">
+                <button 
+                  onClick={handleApply}
+                  className="w-full md:w-auto bg-blue-500 hover:bg-blue-600 text-white px-16 py-5 rounded-full text-lg font-bold transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.5)]"
+                >
                   Apply for the 7-Day Sprint
                 </button>
               </div>
@@ -168,7 +181,10 @@ export function Pricing() {
                 </li>
               </ul>
 
-              <button className="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white px-8 py-4 rounded-full font-bold transition-all hover:scale-105">
+              <button 
+                onClick={handleApply}
+                className="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white px-8 py-4 rounded-full font-bold transition-all hover:scale-105"
+              >
                 Apply Now
               </button>
             </div>
@@ -225,7 +241,10 @@ export function Pricing() {
                   </li>
                 </ul>
 
-                <button className="w-full bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-full font-bold transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.5)]">
+                <button 
+                  onClick={handleApply}
+                  className="w-full bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-full font-bold transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.5)]"
+                >
                   Apply Now
                 </button>
               </div>
@@ -276,7 +295,10 @@ export function Pricing() {
                 </li>
               </ul>
 
-              <button className="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white px-8 py-4 rounded-full font-bold transition-all hover:scale-105">
+              <button 
+                onClick={handleApply}
+                className="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white px-8 py-4 rounded-full font-bold transition-all hover:scale-105"
+              >
                 Apply Now
               </button>
             </div>
@@ -405,7 +427,10 @@ export function Pricing() {
             <p className="text-3xl md:text-4xl text-blue-400 font-bold tracking-[-0.02em] mb-8">
               Crush Your Competitors. Start Leading.
             </p>
-            <button className="group bg-blue-500 hover:bg-blue-600 text-white px-16 py-6 rounded-full text-xl font-bold transition-all hover:scale-105 hover:shadow-[0_0_60px_rgba(59,130,246,0.6)]">
+            <button 
+              onClick={handleApply}
+              className="group bg-blue-500 hover:bg-blue-600 text-white px-16 py-6 rounded-full text-xl font-bold transition-all hover:scale-105 hover:shadow-[0_0_60px_rgba(59,130,246,0.6)]"
+            >
               <span className="flex items-center gap-3">
                 Apply Now
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
@@ -415,10 +440,10 @@ export function Pricing() {
 
           {/* Footer Links */}
           <div className="flex flex-wrap justify-center gap-8 text-sm text-gray-400 mb-8">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-white transition-colors">Contact Us</a>
-            <a href="#" className="hover:text-white transition-colors">FAQ</a>
+            <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</Link>
+            <a href="mailto:contact@steadypulse.ai" className="hover:text-white transition-colors">Contact Us</a>
+            <Link to="/" className="hover:text-white transition-colors">FAQ</Link>
           </div>
 
           {/* Copyright */}

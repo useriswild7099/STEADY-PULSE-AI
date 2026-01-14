@@ -20,11 +20,11 @@
       "dest": "/server/src/index.ts"
     },
     {
+      "handle": "filesystem"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/build/$1",
-      "headers": {
-        "cache-control": "s-maxage=0"
-      }
+      "dest": "/build/index.html"
     }
   ]
 }

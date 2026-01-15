@@ -13,6 +13,8 @@ const generateToken = (user: any) => {
 };
 
 // --- Google Auth ---
+// ⚠️ CRITICAL: DO NOT CHANGE THIS ROUTE OR URLS WITHOUT UPDATING GOOGLE CLOUD CONSOLE ⚠️
+// The callback URL must match exactly what is in the Console.
 router.get('/google', (req, res) => {
     if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET || !process.env.GOOGLE_CALLBACK_URL) {
         console.error('Missing Google OAuth Credentials or Callback URL');

@@ -21,7 +21,6 @@ const VoiceForm: React.FC<VoiceFormProps> = ({ onBack, onComplete }) => {
         voiceDescriptors: [] as string[],
         banWords: '',
         rhythm: '',
-        emojis: '',
         // Section 3: Taste
         loveCreators: '',
         hateCreators: '',
@@ -56,18 +55,17 @@ const VoiceForm: React.FC<VoiceFormProps> = ({ onBack, onComplete }) => {
 Act as a Brand Ghostwriter & Strategist.
 
 **IDENTITY & POV**
-- **Core Belief (Contrarian)**: ${formData.belief}
+- **The Hill You Die On**: ${formData.belief}
 - **Anti-Persona (Repel)**: ${formData.repel}
 - **Industry Frustration**: ${formData.frustration}
 
 **VOICE & TONE**
 - **Descriptors**: ${formData.voiceDescriptors.join(', ')}
 - **Rhythm**: ${formData.rhythm}
-- **Emoji Usage**: ${formData.emojis}
-- **BANNED WORDS**: ${formData.banWords}
+- **The 'Cringe' List**: ${formData.banWords}
 
 **TASTE & REFERENCES**
-- **Love**: ${formData.loveCreators}
+- **Intellectual Benchmarks**: ${formData.loveCreators}
 - **Hate**: ${formData.hateCreators}
 
 **CONTENT STRATEGY**
@@ -108,7 +106,7 @@ Write a "Brand Voice Guidelines" summary, then write 3 sample LinkedIn hooks tha
                         <h3 style={{ marginBottom: '1.5rem', color: 'var(--color-text-main)' }}>1. Point of View (POV)</h3>
 
                         <div style={{ marginBottom: '1.5rem' }}>
-                            <FormInput name="belief" label="One contrarian belief you hold" value={formData.belief} onChange={handleChange} placeholder="Most people think X, but I believe Y..." />
+                            <FormInput name="belief" label="The Hill You Die On" value={formData.belief} onChange={handleChange} placeholder="What is one industry 'truth' that you believe is actually a lie?" />
                         </div>
 
                         <div style={{ marginBottom: '1.5rem' }}>
@@ -139,7 +137,7 @@ Write a "Brand Voice Guidelines" summary, then write 3 sample LinkedIn hooks tha
                             />
                         </div>
 
-                        <FormInput name="banWords" label="Words to NEVER use" value={formData.banWords} onChange={handleChange} placeholder="e.g. hustle, unlock, savage" />
+                        <FormInput name="banWords" label="The 'Cringe' List" value={formData.banWords} onChange={handleChange} placeholder="What industry buzzwords make you instantly lose respect for the speaker?" />
 
                         <div style={{ marginBottom: '1.5rem' }}>
                             <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Sentence Rhythm</label>
@@ -161,25 +159,7 @@ Write a "Brand Voice Guidelines" summary, then write 3 sample LinkedIn hooks tha
                             </div>
                         </div>
 
-                        <div style={{ marginBottom: '1.5rem' }}>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Emoji Usage</label>
-                            <div style={{ display: 'flex', gap: '1rem' }}>
-                                {['Never', 'Rarely', 'Okay'].map(opt => (
-                                    <button
-                                        key={opt}
-                                        onClick={() => handleRadioChange('emojis', opt)}
-                                        style={{
-                                            flex: 1, padding: '0.8rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)',
-                                            background: formData.emojis === opt ? 'var(--color-accent)' : 'transparent',
-                                            color: formData.emojis === opt ? 'white' : 'var(--color-text-main)', cursor: 'pointer',
-                                            transition: 'all 0.2s ease'
-                                        }}
-                                    >
-                                        {opt}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
+
 
                         <Button onClick={() => setStep(2)} style={{ width: '100%', marginTop: '1rem', background: 'var(--color-accent)' }}>Next: Taste & Stories</Button>
                     </div>
@@ -188,8 +168,8 @@ Write a "Brand Voice Guidelines" summary, then write 3 sample LinkedIn hooks tha
                 {step === 2 && (
                     <div className="fade-in">
                         <h3 style={{ marginBottom: '1.5rem', color: 'var(--color-text-main)' }}>3. Taste & References</h3>
-                        <FormInput name="loveCreators" label="Creators you Respect (Why?)" value={formData.loveCreators} onChange={handleChange} placeholder="e.g. Alex Hormozi for simplicity" />
-                        <FormInput name="hateCreators" label="Creators you Dislike (Why?)" value={formData.hateCreators} onChange={handleChange} placeholder="e.g. Generic influencers for fluff" />
+                        <FormInput name="loveCreators" label="Intellectual Benchmarks" value={formData.loveCreators} onChange={handleChange} placeholder="Whose intellect do you respect? (e.g., Musk, Dalio, Jobs, or a specific industry leader)." />
+                        {/* <FormInput name="hateCreators" label="Creators you Dislike (Why?)" value={formData.hateCreators} onChange={handleChange} placeholder="e.g. Generic influencers for fluff" /> */}
 
                         <hr style={{ borderColor: 'rgba(0,0,0,0.1)', margin: '2rem 0' }} />
 
@@ -198,9 +178,7 @@ Write a "Brand Voice Guidelines" summary, then write 3 sample LinkedIn hooks tha
                             <label style={{ display: 'block', marginBottom: '0.8rem', fontWeight: '500' }}>Stories you'll tell</label>
                             <CheckboxGroup
                                 options={[
-                                    { label: 'Origin Story', value: 'Origin' },
                                     { label: 'Failure / Lessons', value: 'Failure' },
-                                    { label: 'Client Wins', value: 'Wins' },
                                     { label: 'Behind the Scenes', value: 'BTS' },
                                     { label: 'Philosophy', value: 'Philosophy' }
                                 ]}
@@ -319,6 +297,9 @@ Write a "Brand Voice Guidelines" summary, then write 3 sample LinkedIn hooks tha
                             <Button variant="secondary" onClick={() => setStep(2)}>Back</Button>
                             <Button onClick={generateVoice} style={{ background: 'var(--color-accent)', boxShadow: 'var(--color-card-shadow)' }}>Calibrate Brand</Button>
                         </div>
+                        <p style={{ marginTop: '1.5rem', fontSize: '0.85rem', color: 'var(--color-text-muted)', textAlign: 'center', fontStyle: 'italic', opacity: 0.7 }}>
+                            "By submitting this, you acknowledge that we do not do 'vanity metrics.' We build assets."
+                        </p>
                     </div>
                 )}
 

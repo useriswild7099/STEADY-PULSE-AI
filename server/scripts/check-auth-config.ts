@@ -16,10 +16,7 @@ if (fs.existsSync(envPath)) {
 const requiredVars = [
     'GOOGLE_CLIENT_ID',
     'GOOGLE_CLIENT_SECRET',
-    'GOOGLE_CALLBACK_URL',
-    'LINKEDIN_CLIENT_ID',
-    'LINKEDIN_CLIENT_SECRET',
-    'LINKEDIN_CALLBACK_URL'
+    'GOOGLE_CALLBACK_URL'
 ];
 
 let hasError = false;
@@ -37,7 +34,7 @@ requiredVars.forEach(varName => {
 });
 
 // Check URL formats
-const urlVars = ['GOOGLE_CALLBACK_URL', 'LINKEDIN_CALLBACK_URL'];
+const urlVars = ['GOOGLE_CALLBACK_URL'];
 urlVars.forEach(varName => {
     const value = process.env[varName];
     if (value) {
@@ -53,9 +50,6 @@ urlVars.forEach(varName => {
             // Warn if specific paths are missing (common mistake)
             if (varName === 'GOOGLE_CALLBACK_URL' && !value.endsWith('/api/auth/google/callback')) {
                 console.warn(`⚠️  ${varName} usually ends with /api/auth/google/callback. Current: ${value}`);
-            }
-             if (varName === 'LINKEDIN_CALLBACK_URL' && !value.endsWith('/api/auth/linkedin/callback')) {
-                console.warn(`⚠️  ${varName} usually ends with /api/auth/linkedin/callback. Current: ${value}`);
             }
 
         } catch (e) {

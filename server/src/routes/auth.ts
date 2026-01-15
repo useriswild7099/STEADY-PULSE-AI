@@ -14,9 +14,9 @@ const generateToken = (user: any) => {
 
 // --- Google Auth ---
 router.get('/google', (req, res) => {
-    if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CALLBACK_URL) {
-        console.error('Missing Google OAuth Credentials');
-        const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET || !process.env.GOOGLE_CALLBACK_URL) {
+        console.error('Missing Google OAuth Credentials or Callback URL');
+        const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
         return res.redirect(`${clientUrl}/client-login?error=Server_Config_Error`);
     }
     console.log('Initiating Google Auth with Client ID:', process.env.GOOGLE_CLIENT_ID);
@@ -74,94 +74,22 @@ router.get('/google/callback', async (req, res) => {
 
         const token = generateToken(user);
 
-        const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+        const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
         const redirectUrl = `${clientUrl}/client-portal?token=${token}&user=${encodeURIComponent(JSON.stringify({ id: user._id, email: user.email, role: user.role }))}`;
         console.log('Redirecting to:', redirectUrl);
 
         // Redirect to frontend with token
-        // In production, use a more secure way, e.g., set cookie or redirect to a loading page that extracts param
         res.redirect(redirectUrl);
     } catch (err: any) {
         console.error('Google Auth Error:', err.message);
         if (err.response) {
             console.error('Response data:', err.response.data);
         }
-        const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+        const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
         res.redirect(`${clientUrl}/client-login?error=Google_Auth_Failed`);
     }
 });
 
-
-// --- LinkedIn Auth ---
-router.get('/linkedin', (req, res) => {
-    if (!process.env.LINKEDIN_CLIENT_ID || !process.env.LINKEDIN_CALLBACK_URL) {
-        console.error('Missing LinkedIn OAuth Credentials');
-        const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
-        return res.redirect(`${clientUrl}/client-login?error=Server_Config_Error`);
-    }
-    const redirectUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${process.env.LINKEDIN_CLIENT_ID}&redirect_uri=${process.env.LINKEDIN_CALLBACK_URL}&scope=openid%20profile%20email`;
-    res.redirect(redirectUrl);
-});
-
-router.get('/linkedin/callback', async (req, res) => {
-    const { code } = req.query;
-    try {
-        const { data } = await axios.post('https://www.linkedin.com/oauth/v2/accessToken', null, {
-            params: {
-                grant_type: 'authorization_code',
-                code,
-                redirect_uri: process.env.LINKEDIN_CALLBACK_URL,
-                client_id: process.env.LINKEDIN_CLIENT_ID,
-                client_secret: process.env.LINKEDIN_CLIENT_SECRET,
-            },
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        });
-
-        const { access_token } = data;
-
-        // Get user info (OpenID Connect)
-        const { data: profile } = await axios.get('https://api.linkedin.com/v2/userinfo', {
-            headers: { Authorization: `Bearer ${access_token}` },
-        });
-
-        let email = profile.email;
-        if (!email && profile.elements) {
-            // Fallback for different LinkedIn API versions which nest email in elements
-            const emailHandle = profile.elements.find((e: any) => e['handle~'] && e['handle~'].emailAddress);
-            if (emailHandle) {
-                email = emailHandle['handle~'].emailAddress;
-            }
-        }
-
-        if (!email) {
-            throw new Error('Could not retrieve email from LinkedIn');
-        }
-
-        let user = await User.findOne({ email });
-
-        if (!user) {
-            user = new User({
-                email,
-                role: 'client',
-                linkedinId: profile.sub || profile.id,
-                onboardingData: {},
-            });
-            await user.save();
-        } else if (!user.linkedinId) {
-            user.linkedinId = profile.sub;
-            await user.save();
-        }
-
-        const token = generateToken(user);
-        const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
-        res.redirect(`${clientUrl}/client-portal?token=${token}&user=${encodeURIComponent(JSON.stringify({ id: user._id, email: user.email, role: user.role }))}`);
-
-    } catch (err) {
-        console.error('LinkedIn Auth Error:', err);
-        const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
-        res.redirect(`${clientUrl}/client-login?error=LinkedIn_Auth_Failed`);
-    }
-});
 
 // Register (Optional, for admin or seeding)
 router.post('/register', async (req, res) => {

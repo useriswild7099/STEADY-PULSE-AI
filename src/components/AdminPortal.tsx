@@ -11,7 +11,8 @@ export function AdminPortal() {
     const [clients, setClients] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedClient, setSelectedClient] = useState<any | null>(null);
-    const [modalTab, setModalTab] = useState<'business' | 'brand' | 'lead-gen' | 'content' | 'analysis' | 'usp'>('business');
+    const [modalTab, setModalTab] = useState<'business' | 'brand' | 'lead-gen' | 'content' | 'analysis' | 'usp' | 'fullForm'>('business');
+    const [copySuccess, setCopySuccess] = useState(false);
     const [modalStatus, setModalStatus] = useState<string>('pending');
 
     // Generated Content State
@@ -84,7 +85,123 @@ export function AdminPortal() {
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);
-        // Could add a toast here
+        setCopySuccess(true);
+        setTimeout(() => setCopySuccess(false), 2000);
+    };
+
+    const formatFormDataAsText = (client: any) => {
+        const generalData = client.onboardingData?.generalData || {};
+        const brandData = client.onboardingData?.brandData || {};
+        
+        const formatValue = (val: any) => {
+            if (Array.isArray(val)) return val.join(', ') || 'Not provided';
+            if (typeof val === 'object' && val !== null) {
+                return Object.entries(val).map(([k, v]) => `${k}: ${v}`).join('; ') || 'Not provided';
+            }
+            return val || 'Not provided';
+        };
+
+        const businessSection = `
+═══════════════════════════════════════════════════════════════
+                      BUSINESS FIT FORM
+═══════════════════════════════════════════════════════════════
+
+📋 ESSENTIAL DETAILS
+─────────────────────────────────────────────────────────────────
+First Name:          ${formatValue(generalData.firstName)}
+Last Name:           ${formatValue(generalData.lastName)}
+Email:               ${formatValue(generalData.email)}
+Phone:               ${formatValue(generalData.phone)}
+Company Name:        ${formatValue(generalData.companyName)}
+Job Title:           ${formatValue(generalData.jobTitle)}
+LinkedIn:            ${formatValue(generalData.linkedin)}
+Instagram:           ${formatValue(generalData.instagram)}
+Other Link:          ${formatValue(generalData.otherLink)}
+
+🎯 CURRENT SITUATION
+─────────────────────────────────────────────────────────────────
+Role:                ${formatValue(generalData.role)} ${generalData.roleOther ? `(${generalData.roleOther})` : ''}
+Platform Focus:      ${formatValue(generalData.platform)}
+Current Stage:       ${formatValue(generalData.stage)} ${generalData.stageOther ? `(${generalData.stageOther})` : ''}
+Blocker/Not Working: ${formatValue(generalData.blocker)}
+
+📈 GOAL & AUDIENCE
+─────────────────────────────────────────────────────────────────
+#1 Priority (90d):   ${formatValue(generalData.priority)} ${generalData.priorityOther ? `(${generalData.priorityOther})` : ''}
+Success Metric:      ${formatValue(generalData.successMetric)}
+Target Audience:     ${formatValue(generalData.audience)}
+Competitors:         ${formatValue(generalData.competitors)}
+Problem:             ${formatValue(generalData.problem)}
+
+💼 OFFER & STRATEGY
+─────────────────────────────────────────────────────────────────
+Offer Type:          ${formatValue(generalData.offerType)} ${generalData.offerTypeOther ? `(${generalData.offerTypeOther})` : ''}
+Differentiation:     ${formatValue(generalData.differentiation)}
+Unfair Advantage:    ${formatValue(generalData.unfairAdvantage)}
+Existing Assets:     ${formatValue(generalData.assets)}
+Asset Details:       ${formatValue(generalData.assetDetails)}
+
+📊 LOGISTICS & QUALIFIERS
+─────────────────────────────────────────────────────────────────
+Monthly Revenue:     ${formatValue(generalData.revenue)} ${generalData.revenueOther ? `(${generalData.revenueOther})` : ''}
+Team Size:           ${formatValue(generalData.team)}
+Anti-Goals:          ${formatValue(generalData.antiGoals)}
+Weekly Capacity:     ${formatValue(generalData.capacity)}
+Hard Constraints:    ${formatValue(generalData.constraints)}
+
+📤 REQUESTED OUTPUTS
+─────────────────────────────────────────────────────────────────
+Outputs:             ${formatValue(generalData.outputs)}
+${generalData.outputsOther ? `Other Outputs:       ${generalData.outputsOther}` : ''}
+`;
+
+        const brandSection = `
+═══════════════════════════════════════════════════════════════
+                       BRAND DNA FORM
+═══════════════════════════════════════════════════════════════
+
+🎯 POINT OF VIEW (POV)
+─────────────────────────────────────────────────────────────────
+The Hill You Die On: ${formatValue(brandData.belief)}
+Who Brand is NOT for:${formatValue(brandData.repel)}
+Industry Frustration:${formatValue(brandData.frustration)}
+
+🗣️ VOICE & TONE
+─────────────────────────────────────────────────────────────────
+Voice Descriptors:   ${formatValue(brandData.voiceDescriptors)}
+Sentence Rhythm:     ${formatValue(brandData.rhythm)}
+Cringe Words/Banned: ${formatValue(brandData.banWords)}
+
+🎨 TASTE & REFERENCES
+─────────────────────────────────────────────────────────────────
+Intellect Benchmarks:${formatValue(brandData.loveCreators)}
+Disliked Creators:   ${formatValue(brandData.hateCreators)}
+
+📖 CONTENT STRATEGY
+─────────────────────────────────────────────────────────────────
+Story Types:         ${formatValue(brandData.stories)}
+Preferred Formats:   ${formatValue(brandData.formats)}
+Aesthetic Style:     ${formatValue(brandData.aesthetic)}
+Visibility Level:    ${formatValue(brandData.visibility)}
+Off-Limits Topics:   ${formatValue(brandData.offLimits)}
+
+🎯 CONVERSION & INTENT
+─────────────────────────────────────────────────────────────────
+CTA Style:           ${formatValue(brandData.ctaStyle)}
+Target Emotions:     ${formatValue(brandData.emotionalIntent)}
+`;
+
+        return `
+╔═══════════════════════════════════════════════════════════════════╗
+║                    CLIENT FORM SUBMISSION                         ║
+║            ${client.email.padEnd(45)}        ║
+║            Date: ${new Date(client.updatedAt || Date.now()).toLocaleDateString().padEnd(40)}        ║
+╚═══════════════════════════════════════════════════════════════════╝
+${businessSection}${brandSection}
+═══════════════════════════════════════════════════════════════
+                      END OF SUBMISSION
+═══════════════════════════════════════════════════════════════
+`;
     };
 
     const handleSaveChanges = async () => {
@@ -236,7 +353,10 @@ export function AdminPortal() {
                 Form Submissions
             </h2>
             <div className="space-y-4">
-                {clients.filter(c => c.onboardingData && Object.keys(c.onboardingData).length > 0).map(client => (
+                {clients.filter(c => c.onboardingData && (
+                    (c.onboardingData.generalData && Object.keys(c.onboardingData.generalData).length > 0) ||
+                    (c.onboardingData.brandData && Object.keys(c.onboardingData.brandData).length > 0)
+                )).map(client => (
                     <div key={client._id} className="flex items-center justify-between p-4 bg-gray-900 border border-gray-800 rounded-xl hover:border-gray-700 transition-colors">
                         <div className="flex items-center gap-4">
                             <div className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
@@ -248,14 +368,17 @@ export function AdminPortal() {
                             </div>
                         </div>
                         <button 
-                            onClick={() => { setSelectedClient(client); setModalTab('business'); }}
+                            onClick={() => { setSelectedClient(client); setModalTab('fullForm'); }}
                             className="px-4 py-2 text-sm font-semibold text-gray-300 bg-gray-800 hover:bg-gray-700 rounded-lg border border-gray-700 transition-colors"
                         >
                             Review Submission
                         </button>
                     </div>
                 ))}
-                {clients.filter(c => c.onboardingData && Object.keys(c.onboardingData).length > 0).length === 0 && (
+                {clients.filter(c => c.onboardingData && (
+                    (c.onboardingData.generalData && Object.keys(c.onboardingData.generalData).length > 0) ||
+                    (c.onboardingData.brandData && Object.keys(c.onboardingData.brandData).length > 0)
+                )).length === 0 && (
                     <div className="text-center py-12 text-gray-500">No submissions found.</div>
                 )}
             </div>
@@ -665,6 +788,7 @@ export function AdminPortal() {
 
                         {/* Modal Tabs */}
                         <div className="flex border-b border-white/10 bg-[#0E1217] px-8 gap-6 overflow-x-auto custom-scrollbar">
+                            <TabButton active={modalTab === 'fullForm'} onClick={() => setModalTab('fullForm')} icon={<FileText className="w-4 h-4" />} label="📋 Full Form" />
                             <TabButton active={modalTab === 'business'} onClick={() => setModalTab('business')} icon={<Briefcase className="w-4 h-4" />} label="Business Fit" />
                             <TabButton active={modalTab === 'brand'} onClick={() => setModalTab('brand')} icon={<Star className="w-4 h-4" />} label="Brand DNA" />
                             <TabButton active={modalTab === 'lead-gen'} onClick={() => setModalTab('lead-gen')} icon={<Target className="w-4 h-4" />} label="Lead Gen Strategy" />
@@ -676,12 +800,20 @@ export function AdminPortal() {
                         {/* Modal Content */}
                         <div className="flex-1 overflow-y-auto p-8 bg-black/20 custom-scrollbar">
                              {/* Content Logic (Same as before) */}
+                             {modalTab === 'fullForm' && (
+                                <FullFormView 
+                                    client={selectedClient} 
+                                    onCopy={() => copyToClipboard(formatFormDataAsText(selectedClient))}
+                                    copySuccess={copySuccess}
+                                />
+                            )}
+
                              {modalTab === 'business' && (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fadeIn">
                                     <DataSection title="Essential Details" data={selectedClient.onboardingData?.generalData} fields={['firstName', 'lastName', 'email', 'phone', 'linkedin', 'companyName']} />
-                                    <DataSection title="Business Identity" data={selectedClient.onboardingData?.generalData} fields={['industry', 'businessModel', 'primaryGoal', 'currentRevenue', 'monthlyAdBudget', 'teamSize']} />
-                                    <DataSection title="Offer & Audience" data={selectedClient.onboardingData?.generalData} fields={['coreOffer', 'offerPricePoint', 'targetAudience', 'keyPainPoints']} />
-                                    <DataSection title="Logistics" data={selectedClient.onboardingData?.generalData} fields={['timezone', 'preferredCommunication', 'startDate']} />
+                                    <DataSection title="Business Identity" data={selectedClient.onboardingData?.generalData} fields={['role', 'stage', 'blocker', 'priority', 'successMetric']} />
+                                    <DataSection title="Offer & Audience" data={selectedClient.onboardingData?.generalData} fields={['audience', 'competitors', 'problem', 'offerType', 'differentiation', 'unfairAdvantage']} />
+                                    <DataSection title="Logistics" data={selectedClient.onboardingData?.generalData} fields={['revenue', 'team', 'capacity', 'constraints', 'outputs']} />
                                 </div>
                             )}
 
@@ -927,6 +1059,197 @@ function PromptView({ title, description, content, onCopy, isAnalysis }: any) {
                 isAnalysis ? 'bg-black/40 border-yellow-500/20 text-gray-300' : 'bg-black/40 border-white/5 text-gray-300'
             }`}>
                 <pre className="whitespace-pre-wrap">{content}</pre>
+            </div>
+        </div>
+    );
+}
+
+function FullFormView({ client, onCopy, copySuccess }: { client: any, onCopy: () => void, copySuccess: boolean }) {
+    const generalData = client.onboardingData?.generalData || {};
+    const brandData = client.onboardingData?.brandData || {};
+
+    const formatValue = (val: any) => {
+        if (Array.isArray(val)) return val.length > 0 ? val.join(', ') : <em className="text-gray-600">Not provided</em>;
+        if (typeof val === 'object' && val !== null) {
+            const entries = Object.entries(val);
+            return entries.length > 0 ? entries.map(([k, v]) => `${k}: ${v}`).join('; ') : <em className="text-gray-600">Not provided</em>;
+        }
+        return val || <em className="text-gray-600">Not provided</em>;
+    };
+
+    const FormField = ({ label, value }: { label: string, value: any }) => (
+        <div className="py-2 border-b border-white/5 last:border-0">
+            <span className="text-xs font-medium text-gray-500 uppercase tracking-wider block mb-1">{label}</span>
+            <span className="text-sm text-gray-200">{formatValue(value)}</span>
+        </div>
+    );
+
+    const FormSection = ({ title, icon, children }: { title: string, icon: string, children: React.ReactNode }) => (
+        <div className="bg-white/5 border border-white/5 rounded-xl p-5 mb-4 hover:bg-white/[0.07] transition-colors">
+            <h4 className="font-semibold text-gray-300 mb-4 pb-2 border-b border-white/5 flex items-center gap-2">
+                <span>{icon}</span> {title}
+            </h4>
+            {children}
+        </div>
+    );
+
+    return (
+        <div className="animate-fadeIn">
+            {/* Header with Copy Button */}
+            <div className="flex items-center justify-between mb-6 sticky top-0 bg-black/80 backdrop-blur-sm py-4 px-2 -mx-2 rounded-xl z-10">
+                <div>
+                    <h3 className="text-xl font-bold text-white mb-1">📋 Complete Form Submission</h3>
+                    <p className="text-sm text-gray-400">All data filled by {client.email}</p>
+                </div>
+                <button 
+                    onClick={onCopy}
+                    className={`flex items-center gap-2 px-6 py-3 rounded-xl text-white text-sm font-bold transition-all shadow-lg ${
+                        copySuccess 
+                            ? 'bg-green-600 shadow-green-500/20' 
+                            : 'bg-blue-600 hover:bg-blue-500 shadow-blue-500/20'
+                    }`}
+                >
+                    {copySuccess ? (
+                        <>
+                            <Check className="w-5 h-5" />
+                            Copied to Clipboard!
+                        </>
+                    ) : (
+                        <>
+                            <Copy className="w-5 h-5" />
+                            Copy All Data
+                        </>
+                    )}
+                </button>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Business Form Column */}
+                <div>
+                    <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <Briefcase className="w-5 h-5 text-blue-400" />
+                        Business Fit Form
+                    </h3>
+
+                    <FormSection title="Essential Details" icon="📋">
+                        <FormField label="First Name" value={generalData.firstName} />
+                        <FormField label="Last Name" value={generalData.lastName} />
+                        <FormField label="Email" value={generalData.email} />
+                        <FormField label="Phone" value={generalData.phone} />
+                        <FormField label="Company Name" value={generalData.companyName} />
+                        <FormField label="Job Title" value={generalData.jobTitle} />
+                        <FormField label="LinkedIn" value={generalData.linkedin} />
+                        <FormField label="Instagram" value={generalData.instagram} />
+                        <FormField label="Other Link" value={generalData.otherLink} />
+                    </FormSection>
+
+                    <FormSection title="Current Situation" icon="🎯">
+                        <FormField label="Role" value={generalData.role} />
+                        {generalData.roleOther && <FormField label="Role (Other)" value={generalData.roleOther} />}
+                        <FormField label="Platform Focus" value={generalData.platform} />
+                        {generalData.platformOther && <FormField label="Platform (Other)" value={generalData.platformOther} />}
+                        <FormField label="Current Stage" value={generalData.stage} />
+                        {generalData.stageOther && <FormField label="Stage (Other)" value={generalData.stageOther} />}
+                        <FormField label="What's NOT Working" value={generalData.blocker} />
+                    </FormSection>
+
+                    <FormSection title="Goal & Audience" icon="📈">
+                        <FormField label="#1 Priority (90 Days)" value={generalData.priority} />
+                        {generalData.priorityOther && <FormField label="Priority (Other)" value={generalData.priorityOther} />}
+                        <FormField label="Success Metric" value={generalData.successMetric} />
+                        <FormField label="Target Audience" value={generalData.audience} />
+                        <FormField label="Competitors" value={generalData.competitors} />
+                        <FormField label="Problem" value={generalData.problem} />
+                    </FormSection>
+
+                    <FormSection title="Offer & Strategy" icon="💼">
+                        <FormField label="Offer Type" value={generalData.offerType} />
+                        {generalData.offerTypeOther && <FormField label="Offer Type (Other)" value={generalData.offerTypeOther} />}
+                        <FormField label="Differentiation" value={generalData.differentiation} />
+                        <FormField label="Unfair Advantage" value={generalData.unfairAdvantage} />
+                        <FormField label="Existing Assets" value={generalData.assets} />
+                        <FormField label="Asset Details" value={generalData.assetDetails} />
+                        {generalData.assetsOther && <FormField label="Assets (Other)" value={generalData.assetsOther} />}
+                    </FormSection>
+
+                    <FormSection title="Logistics & Qualifiers" icon="📊">
+                        <FormField label="Monthly Revenue" value={generalData.revenue} />
+                        {generalData.revenueOther && <FormField label="Revenue (Other)" value={generalData.revenueOther} />}
+                        <FormField label="Team Size" value={generalData.team} />
+                        <FormField label="Anti-Goals" value={generalData.antiGoals} />
+                        <FormField label="Weekly Capacity" value={generalData.capacity} />
+                        <FormField label="Hard Constraints" value={generalData.constraints} />
+                        <FormField label="Requested Outputs" value={generalData.outputs} />
+                        {generalData.outputsOther && <FormField label="Outputs (Other)" value={generalData.outputsOther} />}
+                    </FormSection>
+                </div>
+
+                {/* Brand DNA Form Column */}
+                <div>
+                    <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <Star className="w-5 h-5 text-purple-400" />
+                        Brand DNA Form
+                    </h3>
+
+                    <FormSection title="Point of View (POV)" icon="🎯">
+                        <FormField label="The Hill You Die On" value={brandData.belief} />
+                        <FormField label="Who Brand is NOT for" value={brandData.repel} />
+                        <FormField label="Industry Frustration" value={brandData.frustration} />
+                    </FormSection>
+
+                    <FormSection title="Voice & Tone" icon="🗣️">
+                        <FormField label="Voice Descriptors" value={brandData.voiceDescriptors} />
+                        <FormField label="Sentence Rhythm" value={brandData.rhythm} />
+                        <FormField label="Cringe Words (Banned)" value={brandData.banWords} />
+                    </FormSection>
+
+                    <FormSection title="Taste & References" icon="🎨">
+                        <FormField label="Intellectual Benchmarks" value={brandData.loveCreators} />
+                        <FormField label="Disliked Creators" value={brandData.hateCreators} />
+                    </FormSection>
+
+                    <FormSection title="Content Strategy" icon="📖">
+                        <FormField label="Story Types" value={brandData.stories} />
+                        <FormField label="Preferred Formats" value={brandData.formats} />
+                        <FormField label="Aesthetic Style" value={brandData.aesthetic} />
+                        <FormField label="Visibility Level" value={brandData.visibility} />
+                        <FormField label="Off-Limits Topics" value={brandData.offLimits} />
+                    </FormSection>
+
+                    <FormSection title="Conversion & Intent" icon="🎯">
+                        <FormField label="CTA Style" value={brandData.ctaStyle} />
+                        <FormField label="Target Emotions" value={brandData.emotionalIntent} />
+                    </FormSection>
+
+                    {/* Quick Stats */}
+                    <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-white/10 rounded-xl p-5 mt-4">
+                        <h4 className="font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                            <Zap className="w-4 h-4 text-yellow-400" /> Submission Stats
+                        </h4>
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <span className="text-gray-500">Submitted</span>
+                                <div className="text-white font-medium">{new Date(client.updatedAt || Date.now()).toLocaleDateString()}</div>
+                            </div>
+                            <div>
+                                <span className="text-gray-500">Status</span>
+                                <div className="text-white font-medium capitalize">{client.onboardingStatus || 'pending'}</div>
+                            </div>
+                            <div>
+                                <span className="text-gray-500">Business Form</span>
+                                <div className={`font-medium ${Object.keys(generalData).length > 0 ? 'text-green-400' : 'text-gray-500'}`}>
+                                    {Object.keys(generalData).length > 0 ? '✓ Completed' : '○ Not Started'}
+                                </div>
+                            </div>
+                            <div>
+                                <span className="text-gray-500">Brand Form</span>
+                                <div className={`font-medium ${Object.keys(brandData).length > 0 ? 'text-green-400' : 'text-gray-500'}`}>
+                                    {Object.keys(brandData).length > 0 ? '✓ Completed' : '○ Not Started'}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

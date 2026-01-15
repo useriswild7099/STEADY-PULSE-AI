@@ -2,7 +2,6 @@ import { useState } from 'react';
 import BusinessForm from './forms/BusinessForm';
 import VoiceForm from './forms/VoiceForm';
 
-import { storage } from '../lib/storage';
 import { api } from '../lib/api';
 
 interface OnboardingFlowProps {
@@ -16,40 +15,44 @@ export function OnboardingFlow({ onClose, initialStep = 'general' }: OnboardingF
   const [currentStep, setCurrentStep] = useState<FormStep>(initialStep);
   const [generalData, setGeneralData] = useState<any>(null);
 
-  const handleGeneralComplete = (data: any) => {
+  // Helper to save data to backend
+  const saveToBackend = async (data: { generalData?: any, brandData?: any }) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (token) {
+        console.log('Saving onboarding data to backend...', data);
+        await api.post('/client/onboarding', data, token);
+        console.log('Successfully saved onboarding data.');
+      } else {
+        console.warn('No user token found to save onboarding data');
+      }
+    } catch (e) {
+      console.error('Failed to save onboarding data', e);
+    }
+  };
+
+  const handleGeneralComplete = async (data: any) => {
     setGeneralData(data);
+    
+    // Save Business Form data immediately
+    await saveToBackend({ 
+      generalData: data,
+      brandData: {} // Empty but exists so structure is preserved
+    });
+    
+    // Move to Brand Voice form
     setCurrentStep('brandVoice');
   };
 
   const handleBrandVoiceComplete = async (voiceData: any) => {
-    // Save all data
-    const combinedData = {
-        ...generalData,
+    // Save Voice Form data (will merge with existing generalData on backend)
+    await saveToBackend({ 
+      generalData: generalData || {}, // Use captured data or empty if starting from brandVoice
+      brandData: {
         ...voiceData,
         completedAt: new Date().toISOString()
-    };
-    
-    // Get current user email from local storage or context
-    // This assumes user is logged in.
-    try {
-        const token = localStorage.getItem('token');
-        if (token) {
-            console.log('Saving onboarding data to backend...');
-            // The backend endpoint expects an object with generalData and brandData properties
-            await api.post('/client/onboarding', { 
-                generalData: generalData,
-                brandData: {
-                    ...voiceData,
-                    completedAt: new Date().toISOString()
-                }
-            }, token);
-            console.log('Successfully saved onboarding data.');
-        } else {
-             console.warn('No user token found to save onboarding data');
-        }
-    } catch (e) {
-        console.error('Failed to save onboarding data', e);
-    }
+      }
+    });
 
     setCurrentStep('success');
   };

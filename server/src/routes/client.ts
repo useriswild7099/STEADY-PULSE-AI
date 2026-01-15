@@ -9,11 +9,22 @@ router.post('/onboarding', authMiddleware, async (req: any, res) => {
     try {
         const { generalData, brandData } = req.body;
 
-        // Merge existing onboarding data with new data
+        // Find user and preserve the nested structure for onboarding data
         const user = await User.findById(req.user.userId);
         if (!user) return res.status(404).json({ message: 'User not found' });
 
-        user.onboardingData = { ...user.onboardingData, ...generalData, ...brandData };
+        // Preserve the nested structure: { generalData: {...}, brandData: {...} }
+        user.onboardingData = { 
+            ...user.onboardingData,
+            generalData: {
+                ...(user.onboardingData?.generalData || {}),
+                ...generalData
+            },
+            brandData: {
+                ...(user.onboardingData?.brandData || {}),
+                ...brandData
+            }
+        };
         
         // Set status to pending and timestamp if this is the first submission
         if (!user.onboardingSubmittedAt) {

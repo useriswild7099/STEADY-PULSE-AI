@@ -116,11 +116,17 @@ export const storage = {
       throw new Error('User not found');
     }
 
-    // Merge onboarding data
+    // Preserve the nested structure: { generalData: {...}, brandData: {...} }
     users[userIndex].onboardingData = {
       ...users[userIndex].onboardingData,
-      ...data.generalData,
-      ...data.brandData
+      generalData: {
+        ...(users[userIndex].onboardingData?.generalData || {}),
+        ...data.generalData
+      },
+      brandData: {
+        ...(users[userIndex].onboardingData?.brandData || {}),
+        ...data.brandData
+      }
     };
 
     // Set status and timestamp on first submission

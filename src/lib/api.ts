@@ -75,7 +75,11 @@ export const api = {
                 // Return all users with onboarding data for clients endpoint
                 const users = storage.getUsers();
                 if (endpoint === '/admin/clients') {
-                    return { clients: users.filter((u: any) => u.onboardingData) };
+                    // Filter to only include clients that have submitted form data
+                    return { clients: users.filter((u: any) => 
+                        u.onboardingData && 
+                        (u.onboardingData.generalData || u.onboardingData.brandData)
+                    )};
                 }
                 return users;
             }

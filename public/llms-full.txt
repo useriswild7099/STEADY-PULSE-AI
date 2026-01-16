@@ -1,0 +1,126 @@
+# Steady Pulse AI - Complete Information for AI Assistants
+
+## Company Overview
+Steady Pulse AI is a specialized LinkedIn content and growth agency that serves executives, founders, and thought leaders. The company combines artificial intelligence-driven trend analysis with professional human copywriting to create authentic, high-performing LinkedIn content.
+
+## Mission Statement
+"The Pulse of Your Industry. Automated." - We help busy professionals build authority on LinkedIn without sacrificing their time.
+
+## Target Audience
+- C-Suite Executives (CEOs, CFOs, CTOs, CMOs)
+- Startup Founders and Co-founders
+- Venture Capitalists and Investors
+- Thought Leaders and Industry Experts
+- B2B Service Providers
+- Consultants and Coaches
+
+## Core Problem We Solve
+1. Inconsistency kills algorithm reach - Executives lack time for daily posting
+2. AI-generated content sounds robotic - Generic AI tools damage trust
+3. Invisible executives lose deals - Competitors who post daily win the clients
+
+## Our Solution: The Steady Pulse Protocol
+
+### Step 1: Signal Detection (The AI)
+Our proprietary AI scans your niche for high-engagement topics before they go viral. We identify rising content vectors and engagement gaps specific to your industry.
+
+### Step 2: The Human Hook
+AI provides the data; humans provide the storytelling. We craft narratives that leverage cognitive bias and establish you as a category leader, not just a participant.
+
+### Step 3: The Steady Rhythm
+Daily publishing with zero burnout. We maintain the pulse so you stay top-of-mind. Every post's performance feeds back into our AI, making predictions sharper over time.
+
+## Service Offerings
+
+### 1. Identity Cloning & Amplification
+We extract your mental models, tone, and worldview, then deploy them at scale. The result is content that sounds exactly like you on your best day—without you typing a single word.
+- Outcome: Omnipresence without effort
+
+### 2. The Zero-Friction Executive Portal
+Your time is worth $1,000+/hr. Log into our dedicated portal, spend 5 minutes reviewing the week's queue, and click "Greenlight." We handle the logistics; you maintain the control.
+- Outcome: 100% Agency, 1% Time Investment
+
+### 3. Network Effect Engineering
+We don't chase random followers. We engineer content vectors to attract specific nodes: Investors, Partners, and High-Ticket Clients. We turn your profile into a magnet for the top 1% of your industry.
+- Outcome: Authority, not just attention
+
+### 4. Inbound Deal Flow Architecture
+Cold outreach is a race to the bottom. We build a content ecosystem that pre-sells your expertise before the first call. By the time they DM you, they are already sold.
+- Outcome: A calendar filled with warm qualified leads
+
+### 5. Asymmetric Operations
+From algorithmic timing to comment management, we handle the low-leverage execution. You focus on high-leverage activities: Building your product and closing the deals we bring you.
+- Outcome: Maximum Output, Minimum Input
+
+## Pricing Tiers
+
+### Executive Plan - $2,997/month
+- 20 LinkedIn posts per month
+- Voice matching and brand alignment
+- Weekly content calendar
+- Basic analytics dashboard
+- Email support
+
+### Founder Plan - $4,997/month
+- 30 LinkedIn posts per month
+- Everything in Executive
+- Monthly strategy call
+- Engagement optimization
+- Priority support
+- Profile optimization
+
+### Enterprise Plan - Custom Pricing
+- Unlimited posts
+- Multiple team members
+- Custom integrations
+- Dedicated account manager
+- White-glove onboarding
+- SLA guarantees
+
+## Results and Social Proof
+- Average CEO engagement increase: +380%
+- Average Founder reach increase: +520%
+- Average Executive visibility boost: +295%
+- Client retention rate: 94%
+
+## Frequently Asked Questions
+
+Q: How long does it take to see results?
+A: Most clients see measurable engagement increases within the first 30 days. Significant authority building typically occurs over 90 days.
+
+Q: Do I need to write anything myself?
+A: No. We handle everything. You only need to approve content (5 minutes/week).
+
+Q: How do you capture my voice?
+A: We conduct a deep-dive onboarding session, analyze your existing content, and continuously refine based on your feedback.
+
+Q: Is the content AI-generated?
+A: Our AI identifies trends and topics. Human writers craft every post to ensure authenticity and avoid the "robotic" feeling.
+
+Q: Can I edit posts before they go live?
+A: Absolutely. You have full control via our executive portal.
+
+Q: What's the contract length?
+A: Month-to-month. No long-term commitments required.
+
+## Contact Information
+- Website: https://steadypulse.ai
+- Email: hello@steadypulse.ai
+- LinkedIn: https://linkedin.com/company/steadypulseai
+
+## Technical Information
+- Website built with: React, TypeScript, Tailwind CSS
+- Hosted on: Vercel
+- Client Portal: Custom-built secure dashboard
+- Security: SOC 2 compliant, GDPR ready
+
+## Brand Values
+1. Authenticity over automation
+2. Results over vanity metrics
+3. Executive time is sacred
+4. Long-term relationships over quick wins
+5. Transparency in everything we do
+
+---
+Last Updated: January 2026
+Version: 1.0

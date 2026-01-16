@@ -1,6 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Navigation } from './components/Navigation';
 import { AuroraHero } from './components/AuroraHero';
+import { PainSection } from './components/PainSection';
+import { GlassFeatures } from './components/GlassFeatures';
 import AboutUs from './components/AboutUs';
 import { FloatingWorkflow } from './components/FloatingWorkflow';
 import { ImmersiveCTA } from './components/ImmersiveCTA';
@@ -28,6 +30,8 @@ function Home() {
     <div className="min-h-screen bg-[#FCFCFD] overflow-x-hidden">
       <Navigation />
       <AuroraHero />
+      <PainSection />
+      <GlassFeatures />
       <AboutUs />
       <FAQ />
       <FloatingWorkflow />

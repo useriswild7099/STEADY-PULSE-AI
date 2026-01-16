@@ -1,7 +1,6 @@
 import { Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useScrollParallax } from '../hooks/useParallax';
-import steadyPulseLogo from '../assets/steady-pulse-logo.jpg';
 
 export function AuroraFooter() {
   const scroll = useScrollParallax(0.1);
@@ -19,11 +18,8 @@ export function AuroraFooter() {
           {/* Brand Column */}
           <div className="col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <img 
-                src={steadyPulseLogo} 
-                alt="Steady Pulse AI" 
-                className="h-10 w-auto rounded-full object-contain bg-black" 
-              />
+              <Zap className="w-6 h-6" />
+              <span className="tracking-[-0.02em]">Steady Pulse AI</span>
             </div>
             <p className="text-gray-500 text-sm leading-relaxed max-w-xs">
               The complete content operating system for modern teams.

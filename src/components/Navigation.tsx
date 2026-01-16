@@ -1,4 +1,4 @@
-import steadyPulseLogo from '../assets/steady-pulse-logo.jpg';
+import { TrendingUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export function Navigation() {
@@ -11,11 +11,13 @@ export function Navigation() {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center gap-2 group cursor-pointer" onClick={() => navigate('/')}>
-              <img 
-                src={steadyPulseLogo} 
-                alt="Steady Pulse AI" 
-                className="h-10 w-auto rounded-full object-contain"
-              />
+              <div className="relative">
+                <div className="absolute inset-0 bg-black/5 blur-xl rounded-full"></div>
+                <TrendingUp className="w-5 h-5 relative z-10 transition-transform group-hover:scale-110" />
+              </div>
+              <span className="tracking-[-0.02em]">
+                Steady Pulse AI
+              </span>
             </div>
 
             {/* Nav Links */}

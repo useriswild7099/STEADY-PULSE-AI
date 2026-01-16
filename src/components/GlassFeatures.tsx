@@ -6,51 +6,56 @@ const protocolSteps = [
   {
     icon: Radar,
     step: '01',
-    title: 'Algorithmic Signal Arbitrage',
-    subtitle: 'Predictive Intelligence',
-    description: 'Most guess; we calculate. Our proprietary AI isolates rising content vectors and engagement gaps in your specific niche before they saturate. We don\'t chase trends; we position you to intercept them.',
+    title: 'Signal Detection (The AI)',
+    subtitle: 'The Eye',
+    description: 'Our AI scans your niche for high-engagement topics before they go viral.',
   },
   {
     icon: Brain,
     step: '02',
-    title: 'Status-Signal Narrative Design',
-    subtitle: 'Psychological Architecture',
-    description: 'AI provides the data; we provide the dominance. We restructure raw insights into high-status narratives that leverage cognitive bias, establishing you not just as a participant, but as the category king.',
+    title: 'The Human Hook',
+    subtitle: 'The Hand',
+    description: 'We craft the narrative. AI finds the angle; humans build the trust.',
   },
   {
     icon: Exponential,
     step: '03',
-    title: 'The Compounding Velocity Loop',
-    subtitle: 'Exponential Distribution',
-    description: 'Zero-latency execution. We deploy daily assets to trigger the algorithm\'s \'recency bias.\' Every post feeds data back into our AI, making the next prediction sharper. Your influence doesn\'t just grow; it accelerates.',
+    title: 'The Steady Rhythm',
+    subtitle: 'The Heartbeat',
+    description: 'Daily publishing, zero burnout. We maintain the pulse so you stay top-of-mind.',
   },
 ];
 
 const features = [
   {
-    icon: Users,
-    title: 'Ghost-Writing',
-    description: 'Your voice, our words. Every post is written specifically for you—never generic, always on-brand.',
+    icon: Users, // Fingerprint/DNA - using Users as closest match
+    title: 'Identity Cloning & Amplification',
+    subtitle: 'Omnipresence without effort',
+    description: 'Your Intellectual Property, Scaled. We extract your mental models, tone, and worldview, then deploy them at scale. Content that sounds exactly like you on your best day—without you typing a single word.',
   },
   {
-    icon: CheckCircle2,
-    title: 'Simple Approval',
-    description: 'Review posts in your portal. Approve, edit, or request changes—all in one seamless workflow.',
+    icon: CheckCircle2, // Shield with checkmark
+    title: 'The Zero-Friction Executive Portal',
+    subtitle: '100% Agency, 1% Time Investment',
+    description: 'Command, Don\'t Create. Your time is worth $1,000+/hr. Log into our dedicated portal, spend 5 minutes reviewing the week\'s queue, and click "Greenlight." We handle the logistics; you maintain the control.',
   },
   {
-    icon: TrendingUp,
-    title: 'Audience Growth',
-    description: 'Data-driven content strategy designed to increase followers, engagement, and profile visibility.',
+    icon: Target, // Connected nodes - using Target for precision
+    title: 'Network Effect Engineering',
+    subtitle: 'Authority, not just attention',
+    description: 'Targeted Gravity. We engineer content vectors to attract specific nodes: Investors, Partners, and High-Ticket Clients. We turn your profile into a magnet for the top 1% of your industry.',
   },
   {
-    icon: Target,
-    title: 'Lead Generation',
-    description: 'Turn your LinkedIn presence into a lead-generation engine that attracts your ideal clients.',
+    icon: TrendingUp, // Magnet - using TrendingUp for inbound
+    title: 'Inbound Deal Flow Architecture',
+    subtitle: 'A calendar filled with warm leads',
+    description: 'Stop Chasing. Start Attracting. We build a content ecosystem that pre-sells your expertise before the first call. By the time they DM you, they are already sold.',
   },
   {
-    icon: Zap,
-    title: 'Done-For-You',
-    description: 'From strategy to scheduling, we handle everything. You focus on closing deals, not writing posts.',
+    icon: Zap, // Gear/Cog - using Zap for operations
+    title: 'Asymmetric Operations',
+    subtitle: 'Maximum Output, Minimum Input',
+    description: 'We Take the Labor, You Take the Upside. From algorithmic timing to comment management, we handle the low-leverage execution. You focus on building your product and closing the deals we bring you.',
   },
 ];
 
@@ -59,7 +64,7 @@ export function GlassFeatures() {
   const [protocolExpanded, setProtocolExpanded] = useState(false);
 
   return (
-    <section id="features" className="relative py-40 px-6 perspective-container overflow-hidden">
+    <section id="features" className="relative py-24 md:py-40 px-4 md:px-6 perspective-container overflow-hidden">
       {/* Background Gradient */}
       <div 
         className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-50/30 to-transparent parallax-layer"
@@ -69,7 +74,7 @@ export function GlassFeatures() {
       <div className="relative z-10 max-w-7xl mx-auto perspective-container">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-24 parallax-layer" style={{ transform: 'translateZ(10px)' }}>
-          <h2 className="text-5xl sm:text-6xl md:text-7xl tracking-[-0.03em] leading-tight mb-6">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-[-0.03em] leading-tight mb-6">
             LinkedIn growth.
             <br />
             Without the effort.
@@ -104,8 +109,8 @@ export function GlassFeatures() {
                   
                   {/* Title & Tagline */}
                   <div>
-                    <p className="text-blue-400 text-sm font-semibold tracking-widest uppercase mb-1">Closed-Loop Growth System</p>
-                    <h3 className="text-2xl md:text-4xl font-bold text-white tracking-[-0.02em]">The Authority Engine</h3>
+                    <p className="text-blue-400 text-sm font-semibold tracking-widest uppercase mb-1">A 3-Step Closed-Loop Growth System</p>
+                    <h3 className="text-2xl md:text-4xl font-bold text-white tracking-[-0.02em]">The Steady Pulse Protocol</h3>
                   </div>
                 </div>
 
@@ -223,7 +228,7 @@ export function GlassFeatures() {
         </div>
 
         {/* Glass Cards Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {features.map((feature, index) => (
             <FeatureCard key={index} feature={feature} index={index} />
           ))}
@@ -234,7 +239,7 @@ export function GlassFeatures() {
 }
 
 function FeatureCard({ feature, index }: { feature: any, index: number }) {
-  const { tilt, style } = useParallax({ sensitivity: 10, mobileDisabled: true });
+  const { tilt, style } = useParallax({ sensitivity: 8, mobileDisabled: true }); // Lower sensitivity for smoother feel
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -247,50 +252,83 @@ function FeatureCard({ feature, index }: { feature: any, index: number }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Glow on Hover */}
+      {/* Dynamic ambient glow - stronger on hover */}
       <div 
-        className="absolute -inset-2 bg-gradient-to-r from-gray-200/0 via-gray-200/30 to-gray-200/0 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 parallax-layer" 
-        style={{ transform: 'translateZ(-10px)' }}
+        className="absolute -inset-1 bg-gradient-to-r from-purple-500/0 via-purple-500/50 to-purple-500/0 rounded-[2rem] blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-700 parallax-layer" 
+        style={{ transform: 'translateZ(-12px)' }}
       ></div>
 
-      {/* Glass Card */}
+      {/* Main Card Container */}
       <div 
-        className="relative backdrop-blur-2xl bg-white/50 border border-white/30 rounded-3xl p-10 shadow-lg shadow-black/5 transition-all duration-300 h-full parallax-layer"
+        className="relative overflow-hidden rounded-[2rem] p-8 md:p-10 shadow-2xl transition-all duration-500 h-full parallax-layer border border-white/10 group-hover:border-white/20"
         style={{
+          background: 'linear-gradient(145deg, #0f0c29 0%, #302b63 50%, #24243e 100%)', // Deep moody gradient base
           transform: `
              rotateX(${tilt.x}deg) 
              rotateY(${tilt.y}deg) 
-             ${hovered ? 'translateZ(20px)' : 'translateZ(0px)'}
+             ${hovered ? 'translateZ(20px) scale(1.02)' : 'translateZ(0px)'}
           `,
           boxShadow: hovered 
-            ? '0 25px 50px -12px rgba(0, 0, 0, 0.1), 0 0 15px rgba(255, 255, 255, 0.5) inset' 
-            : '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)'
+            ? '0 30px 60px -12px rgba(0,0,0,0.5), 0 0 40px rgba(139, 92, 246, 0.15) inset' 
+            : '0 10px 30px -10px rgba(0,0,0,0.5), 0 0 20px rgba(139, 92, 246, 0.05) inset'
         }}
       >
-        {/* Dynamic Light Reflection */}
+        {/* Marble Texture - Optimized opacity for legibility */}
         <div 
-          className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          className="absolute inset-0 opacity-40 group-hover:opacity-60 transition-opacity duration-700 mix-blend-overlay"
           style={{
-            background: `radial-gradient(400px circle at ${50 + tilt.y * 2}% ${50 + tilt.x * 2}%, rgba(255,255,255,0.8), transparent 40%)`
+            backgroundImage: `url('/src/assets/marble-bg.jpg')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: 'contrast(1.2) brightness(0.8)' // High-fidelity adjustments
           }}
         />
 
-        {/* Icon Container */}
-        <div className="relative mb-8 parallax-layer" style={{ transform: 'translateZ(15px)' }}>
-          <div className="absolute inset-0 bg-black/5 blur-2xl rounded-2xl"></div>
-          <div className="relative w-14 h-14 bg-gradient-to-br from-gray-900 to-black rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-xl">
-            <feature.icon className="w-7 h-7 text-white" />
+        {/* Specular Noise/Grain for Realism */}
+         <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none" 
+             style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} 
+         />
+
+        {/* Glossy Reflection Gradient */}
+        <div 
+          className="absolute inset-0 rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          style={{
+            background: `radial-gradient(800px circle at ${50 + tilt.y * 4}% ${50 + tilt.x * 4}%, rgba(255,255,255,0.1), transparent 40%)`
+          }}
+        />
+
+        {/* Animated Sheen */}
+        <div className="absolute inset-0 overflow-hidden rounded-[2rem] pointer-events-none">
+          <div 
+            className="absolute -inset-full top-0 block h-full w-1/2 -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 group-hover:animate-shine left-[-100%]"
+          />
+        </div>
+
+        {/* Icon Container - Floating Glass */}
+        <div className="relative mb-8 parallax-layer z-20" style={{ transform: 'translateZ(25px)' }}>
+          <div className="absolute inset-0 bg-purple-500/30 blur-2xl rounded-2xl"></div>
+          <div className="relative w-16 h-16 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] group-hover:scale-110 transition-transform duration-500">
+            <feature.icon className="w-8 h-8 text-purple-300 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]" />
           </div>
         </div>
 
-        {/* Content */}
-        <div className="parallax-layer" style={{ transform: 'translateZ(10px)' }}>
-          <h3 className="text-2xl mb-4 tracking-[-0.02em]">{feature.title}</h3>
-          <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+        {/* Content - High Contrast & Hierarchy */}
+        <div className="relative parallax-layer z-20" style={{ transform: 'translateZ(15px)' }}>
+          <h3 className="text-2xl font-bold mb-3 tracking-[-0.03em] text-white drop-shadow-md">{feature.title}</h3>
+          
+          {feature.subtitle && (
+            <div className="inline-block px-3 py-1 rounded-full bg-purple-500/20 border border-purple-500/30 mb-4 backdrop-blur-sm">
+              <p className="text-purple-200 text-xs font-bold uppercase tracking-wider">{feature.subtitle}</p>
+            </div>
+          )}
+          
+          <p className="text-gray-300 text-sm leading-relaxed font-medium drop-shadow-sm border-l-2 border-purple-500/30 pl-4">
+            {feature.description}
+          </p>
         </div>
 
-        {/* Micro-interaction indicator */}
-        <div className="absolute bottom-8 right-8 w-2 h-2 bg-gray-300 rounded-full opacity-0 group-hover:opacity-100 transition-opacity parallax-layer" style={{ transform: 'translateZ(5px)' }}></div>
+        {/* Corner Decor */}
+        <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-white/20 group-hover:bg-purple-400/50 transition-colors duration-500"></div>
       </div>
     </div>
   );

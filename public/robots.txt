@@ -1,0 +1,13 @@
+# Robots.txt for Steady Pulse AI
+# https://steadypulse.ai
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://steadypulse.ai/sitemap.xml
+
+# Disallow admin and portal areas
+Disallow: /admin
+Disallow: /client
+Disallow: /api/

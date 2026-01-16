@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 import { storage } from './storage';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api');
 
 export const api = {
     async post(endpoint: string, data: any, token?: string) {

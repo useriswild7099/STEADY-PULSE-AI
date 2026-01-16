@@ -21,6 +21,7 @@ import { DocumentationPage } from './components/DocumentationPage';
 import { HelpCenterPage } from './components/HelpCenterPage';
 import { CommunityPage } from './components/CommunityPage';
 import { SupportPage } from './components/SupportPage';
+import { ContactUsPage } from './components/ContactUsPage';
 
 function Home() {
   return (
@@ -68,6 +69,7 @@ export default function App() {
       <Route path="/support" element={<SupportPage />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-of-service" element={<TermsOfService />} />
+      <Route path="/contact-us" element={<ContactUsPage />} />
 
       {/* Auth Routes */}
       <Route path="/client-login" element={

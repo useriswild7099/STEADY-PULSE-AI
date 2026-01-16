@@ -63,9 +63,9 @@ export function AuroraFooter() {
           <div>
             <h3 className="text-white/90 mb-4 tracking-wide">Contact Us</h3>
             <ul className="space-y-3">
-              <li><a href="mailto:contact@steadypulseai.com" className="text-gray-500 hover:text-white transition-colors text-sm">contact@steadypulseai.com</a></li>
-              <li><a href="tel:+1234567890" className="text-gray-500 hover:text-white transition-colors text-sm">+1 (234) 567-890</a></li>
-              <li className="text-gray-500 text-sm">123 Main Street<br/>Anytown, USA 12345</li>
+              <li><Link to="/contact-us" className="text-gray-500 hover:text-white transition-colors text-sm">Get in Touch</Link></li>
+              <li><a href="https://wa.me/917099580081" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-white transition-colors text-sm">+91 7099580081</a></li>
+              <li><a href="mailto:steadypulse.ai@proton.me" className="text-gray-500 hover:text-white transition-colors text-sm">steadypulse.ai@proton.me</a></li>
             </ul>
           </div>
         </div>

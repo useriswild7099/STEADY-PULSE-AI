@@ -52,10 +52,10 @@ export function AuroraFooter() {
           <div>
             <h3 className="text-white/90 mb-4 tracking-wide">Resources</h3>
             <ul className="space-y-3">
-              <li><a href="#" className="text-gray-500 hover:text-white transition-colors text-sm">Documentation</a></li>
-              <li><a href="#" className="text-gray-500 hover:text-white transition-colors text-sm">Help Center</a></li>
-              <li><a href="#" className="text-gray-500 hover:text-white transition-colors text-sm">Community</a></li>
-              <li><a href="#" className="text-gray-500 hover:text-white transition-colors text-sm">Support</a></li>
+              <li><Link to="/documentation" className="text-gray-500 hover:text-white transition-colors text-sm">Documentation</Link></li>
+              <li><Link to="/help-center" className="text-gray-500 hover:text-white transition-colors text-sm">Help Center</Link></li>
+              <li><Link to="/community" className="text-gray-500 hover:text-white transition-colors text-sm">Community</Link></li>
+              <li><Link to="/support" className="text-gray-500 hover:text-white transition-colors text-sm">Support</Link></li>
             </ul>
           </div>
 

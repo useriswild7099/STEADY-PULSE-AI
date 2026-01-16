@@ -17,6 +17,10 @@ import { Pricing } from './components/Pricing';
 import { FeaturesPage } from './components/FeaturesPage';
 import { SecurityPage } from './components/SecurityPage';
 import { ChangelogPage } from './components/ChangelogPage';
+import { DocumentationPage } from './components/DocumentationPage';
+import { HelpCenterPage } from './components/HelpCenterPage';
+import { CommunityPage } from './components/CommunityPage';
+import { SupportPage } from './components/SupportPage';
 
 function Home() {
   return (
@@ -58,6 +62,10 @@ export default function App() {
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/security" element={<SecurityPage />} />
       <Route path="/changelog" element={<ChangelogPage />} />
+      <Route path="/documentation" element={<DocumentationPage />} />
+      <Route path="/help-center" element={<HelpCenterPage />} />
+      <Route path="/community" element={<CommunityPage />} />
+      <Route path="/support" element={<SupportPage />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-of-service" element={<TermsOfService />} />
 

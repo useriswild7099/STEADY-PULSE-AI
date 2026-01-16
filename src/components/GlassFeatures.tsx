@@ -86,10 +86,10 @@ export function GlassFeatures() {
             className="group relative cursor-pointer"
           >
             {/* Electric Blue Glow */}
-            <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 via-blue-600/20 to-blue-500/20 rounded-[2rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+            <div className="absolute -inset-[2px] bg-gradient-to-r from-blue-500 via-blue-400 to-blue-500 rounded-[2rem] blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-700 animate-pulse"></div>
 
             {/* Main Card */}
-            <div className="relative backdrop-blur-2xl bg-gradient-to-br from-gray-900/95 to-gray-800/95 border border-blue-500/20 rounded-[2rem] p-10 md:p-12 shadow-2xl shadow-blue-500/10 transition-all duration-500">
+            <div className="relative backdrop-blur-2xl bg-gradient-to-br from-gray-900 to-black border border-blue-500/50 rounded-[2rem] p-10 md:p-12 shadow-2xl shadow-blue-500/10 transition-all duration-500">
               
               {/* Header Row */}
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-2">
@@ -133,7 +133,7 @@ export function GlassFeatures() {
                       {protocolSteps.map((step, index) => (
                         <div 
                           key={index}
-                          className={`relative bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 border border-blue-500/10 transition-all duration-500 hover:border-blue-500/30 hover:bg-gray-800/70 ${
+                          className={`relative bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 transition-all duration-500 hover:border-blue-500/50 hover:bg-white/10 ${
                             protocolExpanded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
                           }`}
                           style={{ transitionDelay: protocolExpanded ? `${index * 150}ms` : '0ms' }}
@@ -141,7 +141,7 @@ export function GlassFeatures() {
                           {/* Step Number & Icon */}
                           <div className="flex items-center justify-between mb-5">
                             <div className="flex items-center gap-3">
-                              <div className="w-12 h-12 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-xl flex items-center justify-center border border-blue-500/20">
+                              <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
                                 <step.icon className="w-6 h-6 text-blue-400" />
                               </div>
                               <span className="text-3xl font-bold text-blue-500/30">{step.step}</span>

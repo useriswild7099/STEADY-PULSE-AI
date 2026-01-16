@@ -54,16 +54,14 @@ export function AuroraHero() {
             transform: `translateZ(20px)`
           }}
         >
-          Turn Your LinkedIn into a
+          The Pulse of Your Industry.
           <br />
-          Compounding Revenue Asset
+          Automated
         </h1>
 
         {/* Subheadline */}
-        <p className="text-xl sm:text-2xl md:text-3xl text-gray-500 max-w-3xl mx-auto mb-12 leading-relaxed tracking-[-0.01em] parallax-layer" style={{ transform: 'translateZ(10px)' }}>
-          We write. You approve. Your audience grows.
-          <br />
-          The complete LinkedIn growth system for executives and founders.
+        <p className="text-xl sm:text-2xl md:text-3xl text-gray-500 max-w-4xl mx-auto mb-12 leading-relaxed tracking-[-0.01em] parallax-layer" style={{ transform: 'translateZ(10px)' }}>
+          Consistency is the killer. We combine AI-driven trend analysis with human storytelling to keep your brand alive, relevant, and converting while you sleep.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20 parallax-layer" style={{ transform: 'translateZ(30px)' }}>

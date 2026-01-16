@@ -2,7 +2,6 @@ import { ArrowRight, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useParallax, useScrollParallax } from '../hooks/useParallax';
 import aiBrainImg from '../assets/ai-brain.jpg';
-import businessGrowthImg from '../assets/business-growth.jpg';
 
 export function AuroraHero() {
   const navigate = useNavigate();
@@ -50,14 +49,14 @@ export function AuroraHero() {
 
         {/* Hero Headline */}
         <h1 
-          className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-[-0.04em] leading-[0.95] mb-8 parallax-layer"
+          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-[-0.04em] leading-[0.95] mb-8 parallax-layer"
           style={{
             transform: `translateZ(20px)`
           }}
         >
-          Your LinkedIn.
+          Turn Your LinkedIn into a
           <br />
-          Amplified.
+          Compounding Revenue Asset
         </h1>
 
         {/* Subheadline */}
@@ -77,10 +76,6 @@ export function AuroraHero() {
             <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-black to-gray-900 opacity-0 group-hover:opacity-100 transition-opacity"></div>
           </button>
 
-        </div>
-
-        <div className="relative max-w-5xl mx-auto">
-            <img src={businessGrowthImg} alt="Business Growth" className="rounded-2xl shadow-2xl shadow-black/20" />
         </div>
 
         {/* Floating Glass Card */}

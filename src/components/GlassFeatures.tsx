@@ -1,22 +1,28 @@
-import { FileText, Users, CheckCircle2, TrendingUp, Target, Zap, ChevronDown, Radar, Heart, Activity } from 'lucide-react';
+import { FileText, Users, CheckCircle2, TrendingUp, Target, Zap, ChevronDown, Radar, Brain, TrendingUp as Exponential, ArrowRight } from 'lucide-react';
 import { useScrollParallax, useParallax } from '../hooks/useParallax';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 const protocolSteps = [
   {
     icon: Radar,
-    title: 'Signal Detection (The AI)',
-    description: 'Our AI scans your niche for high-engagement topics before they go viral.',
+    step: '01',
+    title: 'Algorithmic Signal Arbitrage',
+    subtitle: 'Predictive Intelligence',
+    description: 'Most guess; we calculate. Our proprietary AI isolates rising content vectors and engagement gaps in your specific niche before they saturate. We don\'t chase trends; we position you to intercept them.',
   },
   {
-    icon: Heart,
-    title: 'The Human Hook',
-    description: 'We craft the narrative. AI finds the angle; humans touch build the trust.',
+    icon: Brain,
+    step: '02',
+    title: 'Status-Signal Narrative Design',
+    subtitle: 'Psychological Architecture',
+    description: 'AI provides the data; we provide the dominance. We restructure raw insights into high-status narratives that leverage cognitive bias, establishing you not just as a participant, but as the category king.',
   },
   {
-    icon: Activity,
-    title: 'The Steady Rhythm',
-    description: 'Daily publishing, zero burnout. We maintain the pulse so you stay top-of-mind.',
+    icon: Exponential,
+    step: '03',
+    title: 'The Compounding Velocity Loop',
+    subtitle: 'Exponential Distribution',
+    description: 'Zero-latency execution. We deploy daily assets to trigger the algorithm\'s \'recency bias.\' Every post feeds data back into our AI, making the next prediction sharper. Your influence doesn\'t just grow; it accelerates.',
   },
 ];
 
@@ -73,64 +79,144 @@ export function GlassFeatures() {
           </p>
         </div>
 
-        {/* The Steady Pulse Protocol - Special Featured Card */}
-        <div className="mb-8">
+        {/* The Authority Engine - Premium Featured Card */}
+        <div className="mb-12">
           <div 
             onClick={() => setProtocolExpanded(!protocolExpanded)}
             className="group relative cursor-pointer"
           >
-            {/* Glow on Hover */}
-            <div className="absolute -inset-2 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-purple-500/10 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            {/* Electric Blue Glow */}
+            <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 via-blue-600/20 to-blue-500/20 rounded-[2rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
             {/* Main Card */}
-            <div className="relative backdrop-blur-2xl bg-gradient-to-br from-white/60 to-white/40 border border-white/30 rounded-3xl p-10 shadow-lg shadow-black/5 transition-all duration-300">
-              <div className="flex items-center justify-between">
+            <div className="relative backdrop-blur-2xl bg-gradient-to-br from-gray-900/95 to-gray-800/95 border border-blue-500/20 rounded-[2rem] p-10 md:p-12 shadow-2xl shadow-blue-500/10 transition-all duration-500">
+              
+              {/* Header Row */}
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-2">
                 <div className="flex items-center gap-6">
-                  {/* Icon */}
+                  {/* Animated Icon Container */}
                   <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20 blur-2xl rounded-2xl"></div>
-                    <div className="relative w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-xl">
-                      <FileText className="w-8 h-8 text-white" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-400/30 to-blue-600/30 blur-2xl rounded-2xl animate-pulse"></div>
+                    <div className="relative w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl shadow-blue-500/30">
+                      <FileText className="w-8 h-8 md:w-10 md:h-10 text-white" />
                     </div>
                   </div>
                   
-                  {/* Title & Description */}
+                  {/* Title & Tagline */}
                   <div>
-                    <h3 className="text-2xl md:text-3xl font-semibold tracking-[-0.02em] mb-2">The Steady Pulse Protocol</h3>
-                    <p className="text-gray-600">Click to discover our 3-step content creation process</p>
+                    <p className="text-blue-400 text-sm font-semibold tracking-widest uppercase mb-1">Closed-Loop Growth System</p>
+                    <h3 className="text-2xl md:text-4xl font-bold text-white tracking-[-0.02em]">The Authority Engine</h3>
                   </div>
                 </div>
 
-                {/* Expand Arrow */}
-                <ChevronDown 
-                  className={`w-8 h-8 text-gray-400 transition-transform duration-300 ${protocolExpanded ? 'rotate-180' : ''}`}
-                />
+                {/* Expand Indicator */}
+                <div className="flex items-center gap-3">
+                  <span className="text-blue-400/70 text-sm hidden md:block">Click to explore the system</span>
+                  <div className={`w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center transition-all duration-300 ${protocolExpanded ? 'rotate-180 bg-blue-500/20' : ''}`}>
+                    <ChevronDown className="w-6 h-6 text-blue-400" />
+                  </div>
+                </div>
               </div>
 
               {/* Expandable Content */}
               <div 
-                className={`grid grid-cols-1 md:grid-cols-3 gap-6 overflow-hidden transition-all duration-500 ease-out ${
-                  protocolExpanded ? 'max-h-[500px] opacity-100 mt-10 pt-10 border-t border-gray-200/50' : 'max-h-0 opacity-0 mt-0'
+                className={`overflow-hidden transition-all duration-700 ease-out ${
+                  protocolExpanded ? 'max-h-[1200px] opacity-100' : 'max-h-0 opacity-0'
                 }`}
               >
-                {protocolSteps.map((step, index) => (
-                  <div 
-                    key={index}
-                    className={`bg-white/50 backdrop-blur-xl rounded-2xl p-6 border border-white/30 transition-all duration-500 ${
-                      protocolExpanded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-                    }`}
-                    style={{ transitionDelay: protocolExpanded ? `${index * 100}ms` : '0ms' }}
-                  >
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center">
-                        <step.icon className="w-5 h-5 text-purple-600" />
-                      </div>
-                      <span className="text-sm font-semibold text-purple-600">Step {index + 1}</span>
+                <div className="pt-10 mt-10 border-t border-blue-500/20">
+                  
+                  {/* Flywheel Visualization */}
+                  <div className="relative mb-12">
+                    {/* The Three Steps */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+                      {protocolSteps.map((step, index) => (
+                        <div 
+                          key={index}
+                          className={`relative bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 border border-blue-500/10 transition-all duration-500 hover:border-blue-500/30 hover:bg-gray-800/70 ${
+                            protocolExpanded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                          }`}
+                          style={{ transitionDelay: protocolExpanded ? `${index * 150}ms` : '0ms' }}
+                        >
+                          {/* Step Number & Icon */}
+                          <div className="flex items-center justify-between mb-5">
+                            <div className="flex items-center gap-3">
+                              <div className="w-12 h-12 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-xl flex items-center justify-center border border-blue-500/20">
+                                <step.icon className="w-6 h-6 text-blue-400" />
+                              </div>
+                              <span className="text-3xl font-bold text-blue-500/30">{step.step}</span>
+                            </div>
+                          </div>
+                          
+                          {/* Subtitle */}
+                          <p className="text-blue-400 text-xs font-semibold tracking-widest uppercase mb-2">{step.subtitle}</p>
+                          
+                          {/* Title */}
+                          <h4 className="text-xl font-bold text-white mb-3">{step.title}</h4>
+                          
+                          {/* Description */}
+                          <p className="text-gray-400 text-sm leading-relaxed">{step.description}</p>
+
+                          {/* Connector Arrow (between cards, visible on md+) */}
+                          {index < 2 && (
+                            <div className="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-6 h-6 bg-gray-900 rounded-full border border-blue-500/30 items-center justify-center">
+                              <ArrowRight className="w-3 h-3 text-blue-400" />
+                            </div>
+                          )}
+                        </div>
+                      ))}
                     </div>
-                    <h4 className="text-lg font-semibold mb-2">{step.title}</h4>
-                    <p className="text-gray-600 text-sm leading-relaxed">{step.description}</p>
+
+                    {/* Data Feedback Loop - The Flywheel Arrow */}
+                    <div 
+                      className={`mt-8 relative transition-all duration-700 ${
+                        protocolExpanded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                      }`}
+                      style={{ transitionDelay: protocolExpanded ? '500ms' : '0ms' }}
+                    >
+                      <div className="relative bg-gradient-to-r from-blue-500/5 via-blue-600/10 to-blue-500/5 rounded-2xl p-6 border border-blue-500/20">
+                        <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
+                          {/* Loop Icon */}
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
+                              <svg className="w-5 h-5 text-blue-400 animate-spin" style={{ animationDuration: '8s' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" />
+                              </svg>
+                            </div>
+                            <div>
+                              <p className="text-blue-400 text-xs font-semibold tracking-widest uppercase">Data Feedback Loop</p>
+                              <p className="text-white font-semibold">Step 03 → Step 01</p>
+                            </div>
+                          </div>
+
+                          {/* Divider */}
+                          <div className="hidden md:block w-px h-12 bg-blue-500/20"></div>
+
+                          {/* Explanation */}
+                          <p className="text-gray-400 text-sm text-center md:text-left max-w-lg">
+                            <span className="text-blue-400 font-semibold">The Compounding Effect:</span> Every post's performance data feeds back into our AI, making each prediction sharper. The longer you're with us, the smarter your growth engine becomes.
+                          </p>
+                        </div>
+
+                        {/* Animated Loop Line */}
+                        <div className="absolute -top-px left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
+                        <div className="absolute -bottom-px left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent"></div>
+                      </div>
+                    </div>
+
+                    {/* High Switching Costs Callout */}
+                    <div 
+                      className={`mt-6 text-center transition-all duration-700 ${
+                        protocolExpanded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                      }`}
+                      style={{ transitionDelay: protocolExpanded ? '700ms' : '0ms' }}
+                    >
+                      <p className="text-gray-500 text-sm">
+                        <span className="text-blue-400">↑</span> This is why our clients stay. Their data becomes their moat.
+                      </p>
+                    </div>
                   </div>
-                ))}
+                </div>
               </div>
             </div>
           </div>
@@ -209,3 +295,4 @@ function FeatureCard({ feature, index }: { feature: any, index: number }) {
     </div>
   );
 }
+

@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import projectGrowthImg from '../assets/project-growth.jpg';
 
 const steps = [
   {
@@ -44,7 +45,7 @@ export function FloatingWorkflow() {
         </div>
 
         <div className="relative max-w-5xl mx-auto mb-24">
-            <img src="/src/assets/show me the $$$$ honey #businessowner….jpg" alt="Business Growth" className="rounded-2xl shadow-2xl shadow-black/20" />
+            <img src={projectGrowthImg} alt="Business Growth" className="rounded-2xl shadow-2xl shadow-black/20" />
         </div>
 
         {/* Workflow Steps */}

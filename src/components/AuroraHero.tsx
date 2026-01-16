@@ -1,6 +1,8 @@
 import { ArrowRight, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useParallax, useScrollParallax } from '../hooks/useParallax';
+import aiBrainImg from '../assets/ai-brain.jpg';
+import businessGrowthImg from '../assets/business-growth.jpg';
 
 export function AuroraHero() {
   const navigate = useNavigate();
@@ -78,7 +80,7 @@ export function AuroraHero() {
         </div>
 
         <div className="relative max-w-5xl mx-auto">
-            <img src="/src/assets/Learn how to start your own business.jpg" alt="Business Growth" className="rounded-2xl shadow-2xl shadow-black/20" />
+            <img src={businessGrowthImg} alt="Business Growth" className="rounded-2xl shadow-2xl shadow-black/20" />
         </div>
 
         {/* Floating Glass Card */}
@@ -167,7 +169,7 @@ export function AuroraHero() {
              className="absolute -top-6 -left-6 w-24 h-24 bg-gradient-to-br from-white/60 to-transparent backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg parallax-layer flex items-center justify-center overflow-hidden"
              style={{ transform: 'translateZ(40px)' }}
           >
-            <img src="/src/assets/ai-brain.jpg" alt="AI Intelligence" className="w-full h-full object-cover opacity-90" />
+            <img src={aiBrainImg} alt="AI Intelligence" className="w-full h-full object-cover opacity-90" />
           </div>
           <div 
             className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-tl from-white/60 to-transparent backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg parallax-layer"

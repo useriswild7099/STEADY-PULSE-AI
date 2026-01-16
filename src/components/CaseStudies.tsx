@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import backgroundImg from '../assets/background.jpg';
 
 const caseStudies = [
   {
@@ -16,7 +17,7 @@ const caseStudies = [
       { name: 'View Project', href: '#' },
       { name: 'Download PDF', href: '#' },
     ],
-    imageUrl: '/src/assets/background.jpg',
+    imageUrl: backgroundImg,
   },
 
 ];

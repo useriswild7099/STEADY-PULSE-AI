@@ -1,23 +1,24 @@
 import React from 'react';
+import backgroundImg from '../assets/background.jpg';
 
 const teamMembers = [
   {
     name: 'John Doe',
     role: 'CEO & Founder',
     bio: 'With over two decades of industry leadership, John has a proven track record of steering companies toward exponential growth. His vision and passion for innovation are the driving forces behind Steady Pulse AI.',
-    imageUrl: '/src/assets/background.jpg',
+    imageUrl: backgroundImg,
   },
   {
     name: 'Jane Smith',
     role: 'Chief Technology Officer',
     bio: 'Jane is a technology powerhouse, renowned for architecting and scaling high-performance software solutions. She leads our engineering team in building the future of content management.',
-    imageUrl: '/src/assets/background.jpg',
+    imageUrl: backgroundImg,
   },
   {
     name: 'Peter Jones',
     role: 'Head of Client Relations',
     bio: 'A master of communication and strategic problem-solving, Peter is dedicated to ensuring an exceptional client experience. He is the champion of our clients\' success.',
-    imageUrl: '/src/assets/background.jpg',
+    imageUrl: backgroundImg,
   },
 ];
 

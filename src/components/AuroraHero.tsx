@@ -105,7 +105,7 @@ export function AuroraHero() {
                     <div className="flex items-start gap-3 mb-4">
                       <div className="w-12 h-12 rounded-full overflow-hidden bg-black flex items-center justify-center shrink-0">
                          {/* Placeholder for Elon's Avatar if no image available, or use a generic user icon */}
-                         <img src="https://pbs.twimg.com/profile_images/1683325380441128960/yRsRRjGO_400x400.jpg" alt="Elon Musk" className="w-full h-full object-cover" onError={(e) => {e.currentTarget.style.display = 'none'; e.currentTarget.parentElement.classList.add('bg-gray-800'); }} />
+                         <img src="https://pbs.twimg.com/profile_images/1683325380441128960/yRsRRjGO_400x400.jpg" alt="Elon Musk" className="w-full h-full object-cover" onError={(e) => {e.currentTarget.style.display = 'none'; e.currentTarget.parentElement?.classList.add('bg-gray-800'); }} />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1">

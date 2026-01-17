@@ -1,5 +1,5 @@
 import React from 'react';
-import backgroundImg from '../assets/background.jpg';
+import backgroundImg from '../assets/background.webp';
 
 const teamMembers = [
   {

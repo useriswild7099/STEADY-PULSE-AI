@@ -277,7 +277,7 @@ function FeatureCard({ feature, index }: { feature: any, index: number }) {
         <div 
           className="absolute inset-0 opacity-40 group-hover:opacity-60 transition-opacity duration-700 mix-blend-overlay"
           style={{
-            backgroundImage: `url('/src/assets/marble-bg.jpg')`,
+            backgroundImage: `url('/src/assets/marble-bg.webp')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             filter: 'contrast(1.2) brightness(0.8)' // High-fidelity adjustments

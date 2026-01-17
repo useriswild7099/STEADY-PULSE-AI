@@ -1,7 +1,7 @@
 import { ArrowRight, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useParallax, useScrollParallax } from '../hooks/useParallax';
-import aiBrainImg from '../assets/ai-brain.jpg';
+import aiBrainImg from '../assets/ai-brain.webp';
 
 export function AuroraHero() {
   const navigate = useNavigate();

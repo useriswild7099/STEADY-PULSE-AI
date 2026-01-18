@@ -3,7 +3,7 @@ import { Navigation } from './components/Navigation';
 import { AuroraHero } from './components/AuroraHero';
 import { PainSection } from './components/PainSection';
 import { GlassFeatures } from './components/GlassFeatures';
-import AboutUs from './components/AboutUs';
+
 import { FloatingWorkflow } from './components/FloatingWorkflow';
 import { ImmersiveCTA } from './components/ImmersiveCTA';
 import { AuroraFooter } from './components/AuroraFooter';
@@ -32,7 +32,7 @@ function Home() {
       <AuroraHero />
       <PainSection />
       <GlassFeatures />
-      <AboutUs />
+
       <FAQ />
       <FloatingWorkflow />
       <ImmersiveCTA />

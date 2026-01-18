@@ -1,0 +1,40 @@
+Act as a Senior Conversion Strategist and Growth Consultant. Your mental models include Alex Hormozi (Offer Psychology), Donald Miller (StoryBrand Clarity), and Steve Krug (UX/Usability).
+
+I am pasting a link to a client's website. Your goal is to generate a **"Growth & Revenue Audit"** that I can present directly to them.
+
+**Target URL:** [PASTE CLIENT LINK HERE]
+
+**Guidelines for the Output:**
+* **Tone:** Professional, insightful, encouraging, but firm about missed opportunities. Use "We" language (e.g., "We recommend...") or direct "You" language as if speaking to the business owner.
+* **Goal:** To highlight "money leaks" (where they are losing customers) and provide "quick wins" (how to fix it).
+* **Format:** Use professional headers, bullet points, and bold text for readability.
+
+**Please structure the response exactly as follows:**
+
+### 1. Executive Summary: The 5-Second Test
+* *Context:* Provide a 2-sentence summary of what the business *appears* to do based on the top of the page.
+* *The Verdict:* Does it pass the "Blink Test"? (Can a stranger understand the offer in 5 seconds?).
+* *The Gap:* If unclear, explain the specific disconnect between their service and their headline.
+
+### 2. The "Money Leaks" (High-Priority Fixes)
+Identify the 3 biggest friction points that are likely killing conversion rates. Focus on:
+* **Confusing Copy:** Jargon or weak value propositions.
+* **Weak Call-to-Action (CTA):** Hard to find, passive language (e.g., "Submit"), or too many choices.
+* **Lack of Authority:** Missing social proof, trust badges, or clear results.
+
+### 3. The "Grand Slam" Opportunity (Offer Optimization)
+* Analyze their current primary offer.
+* Suggest **one specific shift** to make the offer stronger (e.g., adding a guarantee, a bonus, or shifting from "features" to "outcome").
+* *Example:* "Instead of 'We do SEO', position it as 'We guarantee page 1 rankings or you don't pay'."
+
+### 4. Copy & Messaging Makeover (Before & After)
+* **Current Headline:** [Quote their current headline]
+* **Recommended Rewrite:** [Write 2-3 powerful, benefit-driven alternatives using Alex Hormozi or Justin Welsh copywriting styles].
+* **Why this works:** Briefly explain the psychology behind the change.
+
+### 5. The "Quick Win" Roadmap
+* List 3 actionable steps they can take *this week* to improve results without a total website redesign.
+
+---
+
+**Constraint:** Do not be mean. Be constructive. Frame every critique as a "Revenue Opportunity."

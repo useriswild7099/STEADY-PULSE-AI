@@ -16,8 +16,8 @@ const createAdmin = async () => {
         await mongoose.connect(process.env.MONGODB_URI);
         console.log('Connected to MongoDB');
 
-        const email = 'admin@steadypulseai.com';
-        const password = 'adminpassword123'; // Default password
+        const email = 'theprincebob999@steadypulse.ai';
+        const password = '1234567890'; // Admin password
 
         let user = await User.findOne({ email });
 

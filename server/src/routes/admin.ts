@@ -1,8 +1,20 @@
 import express from 'express';
 import User from '../models/User';
 import { isAdmin } from '../middleware/auth';
+import { sensitiveLimiter } from '../middleware/rateLimit';
 
 const router = express.Router();
+
+// Get all admin users/workers (for assignment dropdown)
+router.get('/workers', isAdmin, async (req: any, res) => {
+    try {
+        const workers = await User.find({ role: 'admin' }).select('_id email');
+        res.json(workers);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+});
 
 // Get all users (Admin only)
 router.get('/users', isAdmin, async (req: any, res) => {
@@ -56,8 +68,8 @@ router.get('/clients/:id', isAdmin, async (req: any, res) => {
     }
 });
 
-// Update client onboarding status (Admin only)
-router.put('/clients/:id/status', isAdmin, async (req: any, res) => {
+// Update client onboarding status (Admin only, rate limited)
+router.put('/clients/:id/status', sensitiveLimiter, isAdmin, async (req: any, res) => {
     try {
         const { status, assignedTo } = req.body;
 

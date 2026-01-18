@@ -5,8 +5,25 @@ import { api } from '../lib/api';
 import { PROMPT_TEMPLATES } from '../lib/promptTemplates';
 import { generateLeadGenPrompt, generateContentPrompt, generateMissingAnalysis, generateUspStatement } from '../lib/adminPrompts';
 
+// Super admin email - only this user can access Settings
+const SUPER_ADMIN_EMAIL = 'theprincebob999@steadypulse.ai';
+
 export function AdminPortal() {
     const navigate = useNavigate();
+    
+    // Get current user email for permission checks
+    const currentUserEmail = (() => {
+        try {
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                return user.email || '';
+            }
+        } catch { /* ignore */ }
+        return '';
+    })();
+    
+    const isSuperAdmin = currentUserEmail === SUPER_ADMIN_EMAIL;
     const [activeSection, setActiveSection] = useState<'clients' | 'submissions' | 'prompts' | 'analytics' | 'settings'>('clients');
     const [clients, setClients] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -20,6 +37,12 @@ export function AdminPortal() {
     const [contentPrompt, setContentPrompt] = useState('');
     const [missingAnalysis, setMissingAnalysis] = useState('');
     const [uspStatement, setUspStatement] = useState('');
+
+    // Prompt Library State
+    const [selectedPromptTemplate, setSelectedPromptTemplate] = useState<any | null>(null);
+    const [promptClientId, setPromptClientId] = useState<string>('');
+    const [generatedPromptText, setGeneratedPromptText] = useState<string>('');
+    const [promptCopySuccess, setPromptCopySuccess] = useState(false);
 
     const handleLogout = (e?: React.MouseEvent) => {
         e?.preventDefault();
@@ -63,23 +86,54 @@ export function AdminPortal() {
         }
     }, [selectedClient]);
 
-    // --- Create Admin State ---
+    // --- Create Admin / Worker Management State ---
     const [newAdminEmail, setNewAdminEmail] = useState('');
     const [newAdminPassword, setNewAdminPassword] = useState('');
-    const [createAdminStatus, setCreateAdminStatus] = useState<{type: 'success' | 'error' | null, message: string}>({ type: null, message: '' });
+    const [createAdminStatus, setCreateAdminStatus] = useState<{type: 'success' | 'error' | null, message: string, credentials?: {email: string, password: string}}>({ type: null, message: '' });
+    const [workers, setWorkers] = useState<any[]>([]);
+    const [isLoadingWorkers, setIsLoadingWorkers] = useState(false);
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+    // Fetch workers/admins
+    const fetchWorkers = async () => {
+        try {
+            setIsLoadingWorkers(true);
+            const token = localStorage.getItem('token');
+            if (!token) return;
+            const data = await api.get('/admin/workers', token);
+            setWorkers(Array.isArray(data) ? data : []);
+        } catch (error) {
+            console.error('Failed to fetch workers', error);
+        } finally {
+            setIsLoadingWorkers(false);
+        }
+    };
+
+    // Load workers on mount
+    useEffect(() => {
+        fetchWorkers();
+    }, []);
 
     // --- Actions ---
     const handleCreateAdmin = async (e: React.FormEvent) => {
         e.preventDefault();
         setCreateAdminStatus({ type: null, message: '' });
+        const tempEmail = newAdminEmail;
+        const tempPassword = newAdminPassword;
         try {
-            const token = localStorage.getItem('token');
-            await api.post('/auth/create-admin', { email: newAdminEmail, password: newAdminPassword }, token);
-            setCreateAdminStatus({ type: 'success', message: 'Admin user created successfully.' });
+            const token = localStorage.getItem('token') || undefined;
+            await api.post('/auth/create-admin', { email: tempEmail, password: tempPassword }, token);
+            setCreateAdminStatus({ 
+                type: 'success', 
+                message: 'Worker account created successfully! They can now login with these credentials.',
+                credentials: { email: tempEmail, password: tempPassword }
+            });
             setNewAdminEmail('');
             setNewAdminPassword('');
+            // Refresh workers list
+            fetchWorkers();
         } catch (err: any) {
-            setCreateAdminStatus({ type: 'error', message: err.response?.data?.message || 'Failed to create admin.' });
+            setCreateAdminStatus({ type: 'error', message: err.message || 'Failed to create worker account.' });
         }
     };
 
@@ -385,26 +439,169 @@ ${businessSection}${brandSection}
         </div>
     );
 
+    // Generate prompt text when client or template changes
+    const generatePromptForClient = (template: any, clientId: string) => {
+        if (!template || !clientId) {
+            setGeneratedPromptText('');
+            return;
+        }
+        const client = clients.find(c => c._id === clientId);
+        if (!client) {
+            setGeneratedPromptText('');
+            return;
+        }
+        
+        const brandData = client.onboardingData?.brandData || {};
+        const generalData = client.onboardingData?.generalData || {};
+        
+        const mergedData = {
+            role: generalData.jobTitle || 'Professional',
+            industry: generalData.industry || 'Business',
+            targetAudience: generalData.audience || 'Potential Clients',
+            contentPillars: brandData.contentPillars || [],
+            brandVoice: brandData,
+            generalData: generalData
+        };
+        
+        const promptText = template.template(mergedData);
+        setGeneratedPromptText(promptText);
+    };
+
+    const handlePromptTemplateClick = (template: any) => {
+        setSelectedPromptTemplate(template);
+        setPromptClientId('');
+        setGeneratedPromptText('');
+        setPromptCopySuccess(false);
+    };
+
+    const handlePromptClientChange = (clientId: string) => {
+        setPromptClientId(clientId);
+        if (selectedPromptTemplate) {
+            generatePromptForClient(selectedPromptTemplate, clientId);
+        }
+    };
+
+    const copyPromptToClipboard = () => {
+        if (generatedPromptText) {
+            navigator.clipboard.writeText(generatedPromptText);
+            setPromptCopySuccess(true);
+            setTimeout(() => setPromptCopySuccess(false), 2000);
+        }
+    };
+
     const renderPromptLibrary = () => (
         <div className="space-y-6 animate-fadeIn">
             <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                 <Brain className="w-6 h-6 text-purple-500" />
                 Prompt Library
             </h2>
+            <p className="text-gray-400 text-sm">Click on any prompt to generate it with a client's data.</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {PROMPT_TEMPLATES.map(template => (
-                    <div key={template.id} className="bg-[#111827] border border-gray-800 rounded-xl p-6 hover:border-gray-600 transition-colors group cursor-pointer shadow-lg">
+                    <div 
+                        key={template.id} 
+                        onClick={() => handlePromptTemplateClick(template)}
+                        className="bg-[#111827] border border-gray-800 rounded-xl p-6 hover:border-purple-500/50 transition-colors group cursor-pointer shadow-lg hover:shadow-purple-500/10"
+                    >
                         <div className="w-12 h-12 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                             <Zap className="w-6 h-6 text-purple-400" />
                         </div>
                         <h3 className="text-lg font-bold text-white mb-2 group-hover:text-purple-300 transition-colors">{template.name}</h3>
                         <p className="text-sm text-gray-400 mb-4 line-clamp-3 leading-relaxed">{template.description}</p>
-                        <div className="flex items-center text-xs font-bold text-gray-500 bg-gray-900 w-fit px-2 py-1 rounded border border-gray-800">
-                            SYSTEM TEMPLATE
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center text-xs font-bold text-gray-500 bg-gray-900 w-fit px-2 py-1 rounded border border-gray-800">
+                                SYSTEM TEMPLATE
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                     </div>
                 ))}
             </div>
+
+            {/* Prompt Modal */}
+            {selectedPromptTemplate && (
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4" onClick={() => setSelectedPromptTemplate(null)}>
+                    <div 
+                        className="bg-[#0f1419] border border-gray-800 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Modal Header */}
+                        <div className="px-6 py-4 border-b border-gray-800 flex items-center justify-between bg-[#111827]">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                                    <Zap className="w-5 h-5 text-purple-400" />
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-bold text-white">{selectedPromptTemplate.name}</h3>
+                                    <p className="text-xs text-gray-400">{selectedPromptTemplate.description}</p>
+                                </div>
+                            </div>
+                            <button 
+                                onClick={() => setSelectedPromptTemplate(null)}
+                                className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        {/* Client Selector */}
+                        <div className="px-6 py-4 border-b border-gray-800 bg-[#0d1117]">
+                            <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Select Client to Auto-Fill Data</label>
+                            <select
+                                value={promptClientId}
+                                onChange={(e) => handlePromptClientChange(e.target.value)}
+                                className="w-full bg-gray-900 border border-gray-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 outline-none transition-all"
+                            >
+                                <option value="">-- Select a Client --</option>
+                                {clients.map(client => (
+                                    <option key={client._id} value={client._id}>
+                                        {client.email} {client.onboardingData?.generalData?.companyName ? `(${client.onboardingData.generalData.companyName})` : ''}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Generated Prompt */}
+                        <div className="px-6 py-4 overflow-y-auto" style={{ maxHeight: 'calc(90vh - 240px)' }}>
+                            {!promptClientId ? (
+                                <div className="text-center py-12">
+                                    <Users className="w-12 h-12 text-gray-600 mx-auto mb-4" />
+                                    <p className="text-gray-400">Select a client above to generate the prompt with their data.</p>
+                                </div>
+                            ) : (
+                                <div className="relative">
+                                    <pre className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-sm text-gray-300 whitespace-pre-wrap font-mono leading-relaxed overflow-x-auto">
+                                        {generatedPromptText}
+                                    </pre>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Modal Footer */}
+                        {promptClientId && generatedPromptText && (
+                            <div className="px-6 py-4 border-t border-gray-800 bg-[#111827] flex items-center justify-between">
+                                <p className="text-xs text-gray-500">
+                                    {generatedPromptText.length.toLocaleString()} characters
+                                </p>
+                                <button
+                                    onClick={copyPromptToClipboard}
+                                    className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all ${
+                                        promptCopySuccess 
+                                            ? 'bg-green-600 text-white' 
+                                            : 'bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-500/25'
+                                    }`}
+                                >
+                                    {promptCopySuccess ? (
+                                        <><Check className="w-4 h-4" /> Copied!</>
+                                    ) : (
+                                        <><Copy className="w-4 h-4" /> Copy to Clipboard</>
+                                    )}
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 
@@ -539,7 +736,7 @@ ${businessSection}${brandSection}
                                             <span className="text-sm font-medium text-gray-400 w-6 text-center">{i + 1}</span>
                                             <span className="text-sm font-bold text-white">{industry}</span>
                                         </div>
-                                        <span className="px-3 py-1 text-xs font-bold text-blue-400 bg-blue-500/10 rounded-full">{count} Clients</span>
+                                        <span className="px-3 py-1 text-xs font-bold text-blue-400 bg-blue-500/10 rounded-full">{count as number} Clients</span>
                                     </li>
                                 ))}
                             </ul>
@@ -553,42 +750,103 @@ ${businessSection}${brandSection}
     };
 
     const renderSettings = () => (
-        <div className="max-w-2xl mx-auto space-y-8 animate-fadeIn">
+        <div className="max-w-3xl mx-auto space-y-8 animate-fadeIn">
             <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                 <Settings className="w-6 h-6 text-gray-400" />
                 System Settings
             </h2>
 
-            {/* Create Admin Section */}
+            {/* Team Members Section */}
             <div className="bg-[#111827] border border-gray-800 rounded-2xl p-8 shadow-xl">
                 <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-red-500" />
-                    Create New Admin
+                    <Users className="w-5 h-5 text-blue-500" />
+                    Team Members
                 </h3>
                 <p className="text-sm text-gray-400 mb-6">
-                    Add a new administrator to the system. This user will have full access to all client data and settings.
+                    All admin workers with access to the system.
                 </p>
 
-                {createAdminStatus.message && (
-                    <div className={`p-4 rounded-lg mb-6 text-sm font-semibold border ${
-                        createAdminStatus.type === 'success' 
-                        ? 'bg-green-500/10 text-green-400 border-green-500/20' 
-                        : 'bg-red-500/10 text-red-400 border-red-500/20'
-                    }`}>
+                {isLoadingWorkers ? (
+                    <div className="flex items-center justify-center py-8">
+                        <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
+                    </div>
+                ) : workers.length > 0 ? (
+                    <div className="space-y-3">
+                        {workers.map((worker) => (
+                            <div 
+                                key={worker._id} 
+                                className="flex items-center justify-between p-4 bg-gray-900 border border-gray-800 rounded-xl"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold">
+                                        {worker.email.charAt(0).toUpperCase()}
+                                    </div>
+                                    <div>
+                                        <div className="text-sm font-bold text-white">{worker.email}</div>
+                                        <div className="text-xs text-gray-500">Administrator</div>
+                                    </div>
+                                </div>
+                                <span className="px-3 py-1 text-xs font-bold text-green-400 bg-green-500/10 rounded-full border border-green-500/20">
+                                    Active
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-8 text-gray-500">No team members found.</div>
+                )}
+            </div>
+
+            {/* Create Worker Section */}
+            <div className="bg-[#111827] border border-gray-800 rounded-2xl p-8 shadow-xl">
+                <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                    <Shield className="w-5 h-5 text-purple-500" />
+                    Create New Worker
+                </h3>
+                <p className="text-sm text-gray-400 mb-6">
+                    Add a new worker to your team. They will be able to login at <span className="text-blue-400 font-mono">/admin-login</span> with these credentials.
+                </p>
+
+                {/* Success Message with Credentials */}
+                {createAdminStatus.type === 'success' && createAdminStatus.credentials && (
+                    <div className="p-4 rounded-lg mb-6 bg-green-500/10 border border-green-500/20">
+                        <div className="flex items-center gap-2 text-green-400 font-bold mb-3">
+                            <Check className="w-5 h-5" />
+                            {createAdminStatus.message}
+                        </div>
+                        <div className="bg-gray-900 rounded-lg p-4 space-y-2 font-mono text-sm">
+                            <div className="flex justify-between items-center">
+                                <span className="text-gray-400">Email:</span>
+                                <span className="text-white">{createAdminStatus.credentials.email}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-gray-400">Password:</span>
+                                <span className="text-white">{createAdminStatus.credentials.password}</span>
+                            </div>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-3">
+                            💡 Share these credentials securely with your worker. They should change their password after first login.
+                        </p>
+                    </div>
+                )}
+
+                {/* Error Message */}
+                {createAdminStatus.type === 'error' && (
+                    <div className="p-4 rounded-lg mb-6 text-sm font-semibold border bg-red-500/10 text-red-400 border-red-500/20">
                         {createAdminStatus.message}
                     </div>
                 )}
 
                 <form onSubmit={handleCreateAdmin} className="space-y-4">
                     <div>
-                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Admin Email</label>
+                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Worker Email</label>
                         <input 
                             type="email" 
                             required 
                             value={newAdminEmail}
                             onChange={(e) => setNewAdminEmail(e.target.value)}
                             className="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all"
-                            placeholder="admin@company.com"
+                            placeholder="worker@steadypulse.ai"
                         />
                     </div>
                     <div>
@@ -606,7 +864,7 @@ ${businessSection}${brandSection}
                         type="submit" 
                         className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-500/25 mt-4"
                     >
-                        Create Admin Account
+                        Create Worker Account
                     </button>
                 </form>
             </div>
@@ -628,23 +886,33 @@ ${businessSection}${brandSection}
     return (
         <div className="flex h-screen bg-black text-white overflow-hidden font-sans selection:bg-blue-500/30">
             {/* Sidebar */}
-            <aside className="w-72 bg-[#0b0f15] border-r border-white/5 flex flex-col z-20">
-                <div className="p-6 border-b border-white/5">
-                    <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-600/20">
-                            <Shield className="w-5 h-5 text-white" />
+            <aside className={`${sidebarCollapsed ? 'w-20' : 'w-72'} bg-[#0b0f15] border-r border-white/5 flex flex-col z-20 transition-all duration-300`}>
+                <div className="p-4 border-b border-white/5">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-600/20 flex-shrink-0">
+                                <Shield className="w-5 h-5 text-white" />
+                            </div>
+                            {!sidebarCollapsed && <span className="font-bold text-lg tracking-tight">Admin Portal</span>}
                         </div>
-                        <span className="font-bold text-lg tracking-tight">Admin Portal</span>
+                        <button 
+                            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                            className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
+                            title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                        >
+                            {sidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+                        </button>
                     </div>
                 </div>
 
-                <nav className="flex-1 p-4 space-y-2 overflow-y-auto custom-scrollbar">
-                    <div className="text-xs font-bold text-gray-600 uppercase tracking-widest px-3 mb-2 mt-2">Operations</div>
+                <nav className="flex-1 p-2 space-y-1 overflow-y-auto custom-scrollbar">
+                    {!sidebarCollapsed && <div className="text-xs font-bold text-gray-600 uppercase tracking-widest px-3 mb-2 mt-2">Operations</div>}
                     <SidebarItem 
                         icon={<Users className="w-5 h-5" />} 
                         label="Client Management" 
                         active={activeSection === 'clients'} 
-                        onClick={() => setActiveSection('clients')} 
+                        onClick={() => setActiveSection('clients')}
+                        collapsed={sidebarCollapsed}
                     />
                     <SidebarItem 
                         icon={<FileText className="w-5 h-5" />} 
@@ -652,49 +920,58 @@ ${businessSection}${brandSection}
                         active={activeSection === 'submissions'} 
                         onClick={() => setActiveSection('submissions')}
                         badge={clients.filter(c => c.onboardingStatus === 'pending').length}
+                        collapsed={sidebarCollapsed}
                     />
                     
-                    <div className="text-xs font-bold text-gray-600 uppercase tracking-widest px-3 mb-2 mt-6">Tools</div>
+                    {!sidebarCollapsed && <div className="text-xs font-bold text-gray-600 uppercase tracking-widest px-3 mb-2 mt-6">Tools</div>}
                     <SidebarItem 
                         icon={<Brain className="w-5 h-5" />} 
                         label="Prompt Library" 
                         active={activeSection === 'prompts'} 
                         onClick={() => setActiveSection('prompts')}
+                        collapsed={sidebarCollapsed}
                     />
                     <SidebarItem 
                         icon={<Target className="w-5 h-5" />} 
                         label="Analytics" 
                         active={activeSection === 'analytics'} 
-                        onClick={() => setActiveSection('analytics')} 
+                        onClick={() => setActiveSection('analytics')}
+                        collapsed={sidebarCollapsed}
                     />
 
-                    <div className="text-xs font-bold text-gray-600 uppercase tracking-widest px-3 mb-2 mt-6">System</div>
-                    <SidebarItem 
-                        icon={<Settings className="w-5 h-5" />} 
-                        label="Settings" 
-                        active={activeSection === 'settings'} 
-                        onClick={() => setActiveSection('settings')} 
-                    />
+                    {!sidebarCollapsed && <div className="text-xs font-bold text-gray-600 uppercase tracking-widest px-3 mb-2 mt-6">System</div>}
+                    {isSuperAdmin && (
+                        <SidebarItem 
+                            icon={<Settings className="w-5 h-5" />} 
+                            label="Settings" 
+                            active={activeSection === 'settings'} 
+                            onClick={() => setActiveSection('settings')}
+                            collapsed={sidebarCollapsed}
+                        />
+                    )}
                 </nav>
                 
-                <div className="p-4 border-t border-white/5 bg-[#0b0f15]">
+                <div className="p-3 border-t border-white/5 bg-[#0b0f15]">
                     <button 
                         type="button"
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-500 hover:bg-red-500/10 hover:text-red-400 transition-colors font-medium cursor-pointer relative z-50"
+                        className={`w-full flex items-center ${sidebarCollapsed ? 'justify-center' : 'gap-3'} px-3 py-2.5 rounded-xl text-red-500 hover:bg-red-500/10 hover:text-red-400 transition-colors font-medium cursor-pointer relative z-50`}
+                        title="Sign Out"
                     >
                         <LogOut className="w-5 h-5" />
-                        <span className="text-sm">Sign Out</span>
+                        {!sidebarCollapsed && <span className="text-sm">Sign Out</span>}
                     </button>
-                    <div className="mt-4 px-3 flex items-center gap-3">
-                         <div className="w-8 h-8 rounded-full bg-gray-800 border border-gray-700 flex items-center justify-center text-xs font-bold text-gray-400">
-                            AD
-                         </div>
-                         <div className="overflow-hidden">
-                            <div className="text-sm font-bold text-white truncate">Administrator</div>
-                            <div className="text-xs text-gray-500 truncate">System Access</div>
-                         </div>
-                    </div>
+                    {!sidebarCollapsed && (
+                        <div className="mt-4 px-3 flex items-center gap-3">
+                             <div className="w-8 h-8 rounded-full bg-gray-800 border border-gray-700 flex items-center justify-center text-xs font-bold text-gray-400">
+                                AD
+                             </div>
+                             <div className="overflow-hidden">
+                                <div className="text-sm font-bold text-white truncate">Administrator</div>
+                                <div className="text-xs text-gray-500 truncate">System Access</div>
+                             </div>
+                        </div>
+                    )}
                 </div>
             </aside>
 
@@ -738,7 +1015,14 @@ ${businessSection}${brandSection}
                     {activeSection === 'submissions' && renderSubmissions()}
                     {activeSection === 'prompts' && renderPromptLibrary()}
                     {activeSection === 'analytics' && renderAnalytics()}
-                    {activeSection === 'settings' && renderSettings()}
+                    {activeSection === 'settings' && isSuperAdmin && renderSettings()}
+                    {activeSection === 'settings' && !isSuperAdmin && (
+                        <div className="flex flex-col items-center justify-center h-96 bg-[#111827] border border-gray-800 rounded-2xl">
+                            <Shield className="w-12 h-12 text-red-500 mb-4" />
+                            <h3 className="text-xl font-bold text-white mb-2">Access Denied</h3>
+                            <p className="text-sm text-gray-400">You don't have permission to access this section.</p>
+                        </div>
+                    )}
                 </div>
             </main>
 
@@ -921,23 +1205,24 @@ ${businessSection}${brandSection}
 
 // --- Sub Components ---
 
-function SidebarItem({ icon, label, active, onClick, badge }: any) {
+function SidebarItem({ icon, label, active, onClick, badge, collapsed }: any) {
     return (
         <button 
             onClick={onClick}
-            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all group ${
+            title={collapsed ? label : undefined}
+            className={`w-full flex items-center ${collapsed ? 'justify-center' : 'justify-between'} px-3 py-2.5 rounded-xl transition-all group ${
                 active 
                 ? 'bg-blue-600/10 text-blue-400 border border-blue-600/20' 
                 : 'text-gray-400 hover:bg-white/5 hover:text-white'
             }`}
         >
-            <div className="flex items-center gap-3">
+            <div className={`flex items-center ${collapsed ? '' : 'gap-3'}`}>
                 <div className={`${active ? 'text-blue-400' : 'text-gray-500 group-hover:text-white'}`}>
                     {icon}
                 </div>
-                <span className="text-sm font-medium">{label}</span>
+                {!collapsed && <span className="text-sm font-medium">{label}</span>}
             </div>
-            {badge && (
+            {!collapsed && badge && (
                 <span className="px-2 py-0.5 rounded-full bg-blue-500 text-white text-[10px] font-bold">
                     {badge}
                 </span>

@@ -1,11 +1,12 @@
 import express from 'express';
 import User from '../models/User';
 import { authMiddleware } from '../middleware/auth';
+import { sensitiveLimiter } from '../middleware/rateLimit';
 
 const router = express.Router();
 
-// Submit Onboarding Data
-router.post('/onboarding', authMiddleware, async (req: any, res) => {
+// Submit Onboarding Data (rate limited to prevent spam)
+router.post('/onboarding', sensitiveLimiter, authMiddleware, async (req: any, res) => {
     try {
         const { generalData, brandData } = req.body;
 

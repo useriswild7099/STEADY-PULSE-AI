@@ -5,13 +5,21 @@ export interface IUser extends Document {
     password?: string;
     role: 'client' | 'admin';
     googleId?: string;
-    linkedinId?: string;
+    // Refresh token for persistent sessions
+    refreshToken?: string;
+    refreshTokenExpiry?: Date;
+    // Brute force protection
+    failedLoginAttempts?: number;
+    lockUntil?: Date;
+    // Onboarding
     onboardingData?: any;
     onboardingStatus?: 'pending' | 'in-progress' | 'completed';
     onboardingSubmittedAt?: Date;
     assignedWorker?: mongoose.Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;
+    // Helper method to check if account is locked
+    isLocked(): boolean;
 }
 
 const UserSchema: Schema = new Schema({
@@ -19,7 +27,13 @@ const UserSchema: Schema = new Schema({
     password: { type: String }, // Optional for OAuth users
     role: { type: String, enum: ['client', 'admin'], default: 'client' },
     googleId: { type: String },
-    linkedinId: { type: String },
+    // Refresh token for persistent sessions
+    refreshToken: { type: String },
+    refreshTokenExpiry: { type: Date },
+    // Brute force protection
+    failedLoginAttempts: { type: Number, default: 0 },
+    lockUntil: { type: Date },
+    // Onboarding
     onboardingData: { type: Schema.Types.Mixed }, // Flexible onboarding forms data
     onboardingStatus: {
         type: String,
@@ -32,4 +46,10 @@ const UserSchema: Schema = new Schema({
     timestamps: true
 });
 
+// Check if account is currently locked
+UserSchema.methods.isLocked = function(): boolean {
+    return !!(this.lockUntil && this.lockUntil > new Date());
+};
+
 export default mongoose.model<IUser>('User', UserSchema);
+

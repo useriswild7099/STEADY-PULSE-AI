@@ -25,13 +25,13 @@ export function SupportPage() {
       icon: Mail,
       title: 'Email Support',
       description: 'Get a response within 24 hours',
-      action: 'contact@steadypulseai.com',
-      href: 'mailto:contact@steadypulseai.com'
+      action: 'steadypulse.ai@proton.me',
+      href: 'mailto:steadypulse.ai@proton.me'
     },
     {
       icon: MessageSquare,
       title: 'Live Chat',
-      description: 'Available Mon-Fri, 9am-6pm EST',
+      description: 'Available Mon-Fri, 9am-6pm IST',
       action: 'Start Chat',
       href: '#'
     },
@@ -39,8 +39,8 @@ export function SupportPage() {
       icon: Phone,
       title: 'Phone Support',
       description: 'For urgent inquiries',
-      action: '+1 (234) 567-890',
-      href: 'tel:+1234567890'
+      action: '+91 7099580081',
+      href: 'tel:+917099580081'
     }
   ];
 

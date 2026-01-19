@@ -27,14 +27,29 @@ const generateRefreshToken = () => {
 // ⚠️ CRITICAL: DO NOT CHANGE THIS ROUTE OR URLS WITHOUT UPDATING GOOGLE CLOUD CONSOLE ⚠️
 // The callback URL must match exactly what is in the Console.
 router.get('/google', (req, res) => {
-    if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET || !process.env.GOOGLE_CALLBACK_URL) {
-        console.error('Missing Google OAuth Credentials or Callback URL');
-        const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    const callbackUrl = process.env.GOOGLE_CALLBACK_URL;
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+
+    if (!clientId || !callbackUrl) {
+        console.error('Missing Google OAuth Credentials:', { 
+            hasClientId: !!clientId, 
+            hasCallbackUrl: !!callbackUrl 
+        });
         return res.redirect(`${clientUrl}/client-login?error=Server_Config_Error`);
     }
-    console.log('Initiating Google Auth with Client ID:', process.env.GOOGLE_CLIENT_ID);
-    const redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${process.env.GOOGLE_CALLBACK_URL}&response_type=code&scope=email%20profile`;
-    res.redirect(redirectUrl);
+
+    console.log('Initiating Google Auth with Redirect URI:', callbackUrl);
+    
+    const googleAuthUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
+    googleAuthUrl.searchParams.append('client_id', clientId);
+    googleAuthUrl.searchParams.append('redirect_uri', callbackUrl);
+    googleAuthUrl.searchParams.append('response_type', 'code');
+    googleAuthUrl.searchParams.append('scope', 'email profile');
+    googleAuthUrl.searchParams.append('access_type', 'offline');
+    googleAuthUrl.searchParams.append('prompt', 'consent');
+
+    res.redirect(googleAuthUrl.toString());
 });
 
 router.get('/google/callback', async (req, res) => {
@@ -115,15 +130,19 @@ router.get('/google/callback', async (req, res) => {
         const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
         // Still include URL params for backward compatibility with existing frontend
         const redirectUrl = `${clientUrl}/client-portal?token=${accessToken}&user=${encodeURIComponent(JSON.stringify({ id: user._id, email: user.email, role: user.role }))}`;
-        console.log('Redirecting to:', redirectUrl);
+        console.log('Google Auth Successful. Redirecting user to portal.');
 
         // Redirect to frontend with token
         res.redirect(redirectUrl);
     } catch (err: any) {
-        console.error('Google Auth Error:', err.message);
+        console.error('Google Auth Error Details:');
         if (err.response) {
-            console.error('Response data:', err.response.data);
+            console.error('Status:', err.response.status);
+            console.error('Data:', JSON.stringify(err.response.data, null, 2));
+        } else {
+            console.error('Message:', err.message);
         }
+        
         const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
         res.redirect(`${clientUrl}/client-login?error=Google_Auth_Failed`);
     }

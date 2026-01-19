@@ -97,13 +97,13 @@ export function AuroraHero() {
             <div className="relative aspect-video rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-50">
               {/* LinkedIn Post Preview */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-full h-full bg-[#F8F9FA] p-12">
+                <div className="w-full h-full bg-[#F8F9FA] p-4 sm:p-8 md:p-12">
                   {/* Mock LinkedIn Post */}
-                  <div className="max-w-2xl mx-auto backdrop-blur-xl bg-white/80 rounded-2xl border border-gray-200/50 p-8 shadow-lg transform transition-transform hover:scale-[1.01] duration-500">
+                  <div className="max-w-2xl mx-auto backdrop-blur-xl bg-white/80 rounded-2xl border border-gray-200/50 p-4 sm:p-6 md:p-8 shadow-lg transform transition-transform hover:scale-[1.01] duration-500">
                     {/* Post Header */}
                     {/* Post Header */}
                     <div className="flex items-start gap-3 mb-4">
-                      <div className="w-12 h-12 rounded-full overflow-hidden bg-black flex items-center justify-center shrink-0">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-black flex items-center justify-center shrink-0">
                          {/* Placeholder for Elon's Avatar if no image available, or use a generic user icon */}
                          <img src="https://pbs.twimg.com/profile_images/1683325380441128960/yRsRRjGO_400x400.jpg" alt="Elon Musk" className="w-full h-full object-cover" onError={(e) => {e.currentTarget.style.display = 'none'; e.currentTarget.parentElement?.classList.add('bg-gray-800'); }} />
                       </div>
@@ -159,13 +159,13 @@ export function AuroraHero() {
 
           {/* Floating Accents */}
           <div 
-             className="absolute -top-6 -left-6 w-24 h-24 bg-gradient-to-br from-white/60 to-transparent backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg parallax-layer flex items-center justify-center overflow-hidden"
+             className="absolute -top-4 -left-4 sm:-top-6 sm:-left-6 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-white/60 to-transparent backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg parallax-layer hidden sm:flex items-center justify-center overflow-hidden"
              style={{ transform: 'translateZ(40px)' }}
           >
             <img src={aiBrainImg} alt="AI Intelligence" className="w-full h-full object-cover opacity-90" />
           </div>
           <div 
-            className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-tl from-white/60 to-transparent backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg parallax-layer"
+            className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 w-20 h-20 sm:w-32 sm:h-32 bg-gradient-to-tl from-white/60 to-transparent backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg parallax-layer hidden sm:block"
             style={{ transform: 'translateZ(60px)' }}
           ></div>
         </div>

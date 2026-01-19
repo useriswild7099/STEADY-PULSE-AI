@@ -9,15 +9,8 @@ export function Navigation() {
       <div className="max-w-6xl mx-auto">
         <div className="relative backdrop-blur-2xl bg-white/40 border border-white/20 rounded-full shadow-lg shadow-black/5 px-6 py-3">
           <div className="flex items-center justify-between">
-            {/* Logo */}
             <div className="flex items-center gap-2 group cursor-pointer" onClick={() => navigate('/')}>
-              <div className="relative">
-                <div className="absolute inset-0 bg-black/5 blur-xl rounded-full"></div>
-                <TrendingUp className="w-5 h-5 relative z-10 transition-transform group-hover:scale-110" />
-              </div>
-              <span className="tracking-[-0.02em]">
-                Steady Pulse AI
-              </span>
+              <img src="/logo.png" alt="Steady Pulse AI" className="h-12 w-auto transition-transform group-hover:scale-105 rounded-lg" />
             </div>
 
             {/* Nav Links */}

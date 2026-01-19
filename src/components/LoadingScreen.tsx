@@ -2,30 +2,67 @@ import { TrendingUp } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 const quotes = [
-  "Great content isn't built in a day. But your empire starts today.",
-  "Rome wasn't built in a day, but they were laying bricks every hour.",
-  "Your future self is already thanking you for this.",
-  "Success is the sum of small efforts, repeated day in and day out.",
-  "The best time to start was yesterday. The second best time is now.",
-  "Patience is not about waiting. It's about how you act while waiting.",
-  "Every expert was once a beginner who refused to give up.",
-  "Your LinkedIn game is about to level up. Buckle up.",
-  "Good things take time. Great things take a little longer.",
-  "The journey of a thousand posts begins with a single form.",
-  "While you wait, your competitors are still procrastinating.",
-  "Excellence is not an act, but a habit we're building together.",
-  "This brief pause is the calm before your content storm.",
-  "Investing in yourself is the best investment you'll ever make.",
-  "The grind never stops, but smart people know when to delegate.",
-  "Your personal brand is your most valuable asset. Let's build it.",
-  "Loading your future... it's looking pretty awesome from here.",
-  "Great brands aren't born. They're crafted, refined, and amplified.",
-  "In a world of noise, we're crafting your signal.",
-  "The algorithm favors the bold. And you're about to get bold.",
+  // 🧠 Technical & AI-Focused
+  "Calibrating neural synapses...",
+  "Aligning the vector space for maximum accuracy.",
+  "Training the model on \"patience\" (ETA: 5 seconds).",
+  "Fine-tuning the weights and biases.",
+  "Optimizing gradient descent for a smoother experience.",
+  "Initializing deep learning modules...",
+  "Distilling the data into insights.",
+  "Fetching cloud-native intelligence.",
+  "Reticulating 1s and 0s.",
+  "Synchronizing the digital heartbeat.",
+  "Analyzing pattern recognition matrices.",
+  "Resolving latent space variables.",
+  "Compiling the logic of tomorrow.",
+
+  // 😂 Humorous & Relatable
+  "Teaching the AI how to appreciate coffee.",
+  "Shoveling more data into the furnace.",
+  "Looking for the \"Any\" key... still haven't found it.",
+  "I'm not slow, I'm just being thorough.",
+  "Convincing the servers to cooperate today.",
+  "Translating \"Beep Boop\" into English for you.",
+  "Counting to infinity... please wait.",
+  "Looking for a needle in a digital haystack.",
+  "The pixels are currently taking a nap.",
+  "Adding more \"Intelligence\" to the Artificial.",
+  "Please wait—the AI is having a \"Eureka\" moment.",
+  "Loading... because even computers need to think.",
+
+  // 📈 Marketing & Branding
+  "Keeping your brand's pulse steady.",
+  "Where data meets intuition.",
+  "Powering the heartbeat of your digital strategy.",
+  "Precision in every pulse.",
+  "Elevating your brand with every byte.",
+  "Your brand, amplified by intelligence.",
+  "The steady path to smarter results.",
+  "Real-time insights, real-time growth.",
+  "Connecting the dots you didn't know existed.",
+  "Beyond the buzzwords. Into the results.",
+  "Your competitive edge is loading.",
+  "Crafting the future of your online presence.",
+
+  // 💼 Business & Strategy
+  "Turning raw data into ROI.",
+  "Efficiency is our middle name. (Actually, it's Pulse).",
+  "Transforming complexity into clarity.",
+  "Scaling your vision through automation.",
+  "Disrupting the status quo, one pulse at a time.",
+  "Strategy is just a really good algorithm.",
+  "Future-proofing your business operations.",
+  "High performance. Low friction.",
+  "Maximizing output, minimizing effort.",
+  "Bridging the gap between data and profit.",
+  "The science of staying ahead of the curve.",
+  "Optimizing the roadmap to your success.",
+  "Your data is working hard so you don't have to.",
 ];
 
 export function LoadingScreen() {
-  const [currentQuote, setCurrentQuote] = useState(0);
+  const [currentQuote, setCurrentQuote] = useState(() => Math.floor(Math.random() * quotes.length));
   const [fadeClass, setFadeClass] = useState('opacity-100');
 
   useEffect(() => {

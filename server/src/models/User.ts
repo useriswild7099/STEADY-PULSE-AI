@@ -3,6 +3,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface IUser extends Document {
     email: string;
     password?: string;
+    phone?: string;
     role: 'client' | 'admin';
     googleId?: string;
     // Refresh token for persistent sessions
@@ -25,6 +26,7 @@ export interface IUser extends Document {
 const UserSchema: Schema = new Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String }, // Optional for OAuth users
+    phone: { type: String },
     role: { type: String, enum: ['client', 'admin'], default: 'client' },
     googleId: { type: String },
     // Refresh token for persistent sessions

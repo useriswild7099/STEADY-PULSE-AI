@@ -1,8 +1,20 @@
-import { useState } from 'react';
-import { ArrowLeft, TrendingUp, Lock, Mail } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { ArrowLeft, Lock, Mail, Phone, Eye, EyeOff, Check, X, CheckCircle } from 'lucide-react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { api } from '../lib/api';
 import { ParentCompanyBadge } from './ui/ParentCompanyBadge';
+
+// Password strength checker
+const checkPasswordStrength = (password: string) => {
+  const checks = {
+    length: password.length >= 8,
+    uppercase: /[A-Z]/.test(password),
+    lowercase: /[a-z]/.test(password),
+    number: /[0-9]/.test(password),
+  };
+  const score = Object.values(checks).filter(Boolean).length;
+  return { checks, score, isStrong: score === 4 };
+};
 
 export function ClientLogin() {
   const navigate = useNavigate();
@@ -10,33 +22,116 @@ export function ClientLogin() {
   const [isLogin, setIsLogin] = useState(!location.state?.isSignup);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState(''); // Added for registration if we want to capture name, but User model doesn't have name yet? User model has email, password, role, onboardingData. Let's stick to email/password for now to match backend.
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [countryCode, setCountryCode] = useState('+91');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  
+  // Success splash state
+  const [showSuccessSplash, setShowSuccessSplash] = useState(false);
+  const [countdown, setCountdown] = useState(3);
+
+  // Password validation
+  const passwordStrength = checkPasswordStrength(password);
+  const passwordsMatch = password === confirmPassword && confirmPassword.length > 0;
+
+  // Countdown effect for success splash
+  useEffect(() => {
+    if (showSuccessSplash && countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (showSuccessSplash && countdown === 0) {
+      setShowSuccessSplash(false);
+      setIsLogin(true);
+      // Reset form
+      setPassword('');
+      setConfirmPassword('');
+      setPhone('');
+      setCountryCode('+91');
+      setAgreeTerms(false);
+    }
+  }, [showSuccessSplash, countdown]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const endpoint = isLogin ? '/auth/login' : '/auth/register';
-      const response = await api.post(endpoint, { email, password });
+    setError('');
 
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('user', JSON.stringify(response.user));
-      navigate('/client-portal');
+    // Validation for registration
+    if (!isLogin) {
+      if (!passwordStrength.isStrong) {
+        setError('Please create a stronger password');
+        return;
+      }
+      if (!passwordsMatch) {
+        setError('Passwords do not match');
+        return;
+      }
+      if (!agreeTerms) {
+        setError('Please agree to the Terms & Privacy Policy');
+        return;
+      }
+    }
+
+    setIsLoading(true);
+
+    try {
+      if (isLogin) {
+        // Login flow
+        const response = await api.post('/auth/login', { email, password });
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        navigate('/client-portal');
+      } else {
+        // Registration flow
+        await api.post('/auth/register', { email, password, phone: `${countryCode} ${phone}` });
+        // Show success splash
+        setShowSuccessSplash(true);
+        setCountdown(3);
+      }
     } catch (error: any) {
-      alert(error.message || (isLogin ? 'Login failed' : 'Registration failed'));
+      setError(error.message || (isLogin ? 'Login failed' : 'Registration failed'));
+    } finally {
+      setIsLoading(false);
     }
   };
 
-
-
   const handleSocialLogin = (provider: 'google' | 'linkedin') => {
-    // Dynamically get API URL from the config or current origin fallback
     const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api');
     window.location.href = `${API_URL}/auth/${provider}`;
   };
 
+  // Success Splash Screen
+  if (showSuccessSplash) {
+    return (
+      <div className="min-h-screen bg-[#FCFCFD] flex items-center justify-center px-6">
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-green-100 mb-8 animate-bounce">
+            <CheckCircle className="w-12 h-12 text-green-600" />
+          </div>
+          <h1 className="text-4xl md:text-5xl tracking-[-0.03em] mb-4">
+            Account Created Successfully!
+          </h1>
+          <p className="text-xl text-gray-500 mb-8">
+            Redirecting to login in {countdown} seconds...
+          </p>
+          <div className="w-64 h-2 bg-gray-200 rounded-full overflow-hidden mx-auto">
+            <div 
+              className="h-full bg-green-500 transition-all duration-1000 ease-linear"
+              style={{ width: `${((3 - countdown) / 3) * 100}%` }}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#FCFCFD] relative overflow-hidden">
-      {/* ... Background ... */}
+      {/* Background */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gradient-to-br from-gray-200/40 via-transparent to-transparent rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-to-tl from-gray-100/30 via-transparent to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
@@ -62,9 +157,8 @@ export function ClientLogin() {
       <div className="relative z-10 min-h-screen flex items-center justify-center px-6 py-20">
         <div className="w-full max-w-md">
           {/* Logo & Heading */}
-          <div className="text-center mb-12">
-            {/* Logo Stack - Vertically Centered */}
-            <div className="flex flex-col items-center mb-8">
+          <div className="text-center mb-8">
+            <div className="flex flex-col items-center mb-6">
               <img 
                 src="/logo.png" 
                 alt="Steady Pulse AI" 
@@ -83,13 +177,18 @@ export function ClientLogin() {
 
           {/* Login Card */}
           <div className="relative">
-            {/* Glow Effect */}
             <div className="absolute -inset-4 bg-gradient-to-r from-gray-200/30 via-transparent to-gray-200/30 blur-2xl"></div>
 
-            {/* Glass Card */}
             <div className="relative backdrop-blur-2xl bg-white/60 border border-white/30 rounded-3xl p-8 shadow-2xl shadow-black/10">
-              <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Error Message */}
+              {error && (
+                <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm flex items-center gap-2">
+                  <X className="w-4 h-4 flex-shrink-0" />
+                  {error}
+                </div>
+              )}
 
+              <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Email Field */}
                 <div>
                   <label htmlFor="email" className="block text-sm text-gray-700 mb-2">
@@ -109,6 +208,59 @@ export function ClientLogin() {
                   </div>
                 </div>
 
+                {/* Phone Field - Registration Only */}
+                {!isLogin && (
+                  <div>
+                    <label htmlFor="phone" className="block text-sm text-gray-700 mb-2">
+                      Phone Number
+                    </label>
+                    <div className="flex gap-2">
+                      {/* Country Code Selector */}
+                      <div className="relative">
+                        <select
+                          value={countryCode}
+                          onChange={(e) => setCountryCode(e.target.value)}
+                          className="appearance-none backdrop-blur-xl bg-white/50 border border-white/40 rounded-2xl px-4 py-4 pr-8 focus:outline-none focus:border-gray-400 transition-colors text-gray-700 cursor-pointer"
+                        >
+                          <option value="+1">🇺🇸 +1</option>
+                          <option value="+44">🇬🇧 +44</option>
+                          <option value="+91">🇮🇳 +91</option>
+                          <option value="+61">🇦🇺 +61</option>
+                          <option value="+49">🇩🇪 +49</option>
+                          <option value="+33">🇫🇷 +33</option>
+                          <option value="+81">🇯🇵 +81</option>
+                          <option value="+86">🇨🇳 +86</option>
+                          <option value="+971">🇦🇪 +971</option>
+                          <option value="+65">🇸🇬 +65</option>
+                          <option value="+966">🇸🇦 +966</option>
+                          <option value="+55">🇧🇷 +55</option>
+                          <option value="+52">🇲🇽 +52</option>
+                          <option value="+234">🇳🇬 +234</option>
+                          <option value="+27">🇿🇦 +27</option>
+                        </select>
+                        <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
+                          <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </div>
+                      </div>
+                      {/* Phone Input */}
+                      <div className="relative flex-1">
+                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <input
+                          type="tel"
+                          id="phone"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          placeholder="(555) 000-0000"
+                          className="w-full backdrop-blur-xl bg-white/50 border border-white/40 rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:border-gray-400 transition-colors"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Password Field */}
                 <div>
                   <label htmlFor="password" className="block text-sm text-gray-700 mb-2">
@@ -117,21 +269,105 @@ export function ClientLogin() {
                   <div className="relative">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
-                      type="password"
+                      type={showPassword ? 'text' : 'password'}
                       id="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Enter your password"
-                      className="w-full backdrop-blur-xl bg-white/50 border border-white/40 rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:border-gray-400 transition-colors"
+                      placeholder={isLogin ? 'Enter your password' : 'Create a strong password'}
+                      className="w-full backdrop-blur-xl bg-white/50 border border-white/40 rounded-2xl pl-12 pr-12 py-4 focus:outline-none focus:border-gray-400 transition-colors"
                       required
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    >
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
                   </div>
+
+                  {/* Password Strength Indicator - Registration Only */}
+                  {!isLogin && password.length > 0 && (
+                    <div className="mt-3 space-y-2">
+                      {/* Strength Bar */}
+                      <div className="flex gap-1">
+                        {[1, 2, 3, 4].map((level) => (
+                          <div
+                            key={level}
+                            className={`h-1.5 flex-1 rounded-full transition-colors ${
+                              passwordStrength.score >= level
+                                ? passwordStrength.score <= 2
+                                  ? 'bg-red-400'
+                                  : passwordStrength.score === 3
+                                  ? 'bg-yellow-400'
+                                  : 'bg-green-500'
+                                : 'bg-gray-200'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      {/* Requirements */}
+                      <div className="grid grid-cols-2 gap-1 text-xs">
+                        {[
+                          { key: 'length', label: '8+ characters' },
+                          { key: 'uppercase', label: 'Uppercase' },
+                          { key: 'lowercase', label: 'Lowercase' },
+                          { key: 'number', label: 'Number' },
+                        ].map(({ key, label }) => (
+                          <div key={key} className={`flex items-center gap-1 ${passwordStrength.checks[key as keyof typeof passwordStrength.checks] ? 'text-green-600' : 'text-gray-400'}`}>
+                            {passwordStrength.checks[key as keyof typeof passwordStrength.checks] ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
+                            {label}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
+                {/* Confirm Password Field - Registration Only */}
+                {!isLogin && (
+                  <div>
+                    <label htmlFor="confirmPassword" className="block text-sm text-gray-700 mb-2">
+                      Confirm Password
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type={showConfirmPassword ? 'text' : 'password'}
+                        id="confirmPassword"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="Confirm your password"
+                        className={`w-full backdrop-blur-xl bg-white/50 border rounded-2xl pl-12 pr-12 py-4 focus:outline-none transition-colors ${
+                          confirmPassword.length > 0
+                            ? passwordsMatch
+                              ? 'border-green-400'
+                              : 'border-red-400'
+                            : 'border-white/40 focus:border-gray-400'
+                        }`}
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      </button>
+                    </div>
+                    {confirmPassword.length > 0 && (
+                      <p className={`mt-1 text-xs flex items-center gap-1 ${passwordsMatch ? 'text-green-600' : 'text-red-500'}`}>
+                        {passwordsMatch ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
+                        {passwordsMatch ? 'Passwords match' : 'Passwords do not match'}
+                      </p>
+                    )}
+                  </div>
+                )}
+
                 {/* Remember & Forgot / Terms */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-start">
                   {isLogin ? (
-                    <>
+                    <div className="flex items-center justify-between w-full">
                       <label className="flex items-center gap-2 cursor-pointer group">
                         <input
                           type="checkbox"
@@ -147,27 +383,55 @@ export function ClientLogin() {
                       >
                         Forgot password?
                       </button>
-                    </>
-                  ) : (
-                    <div className="text-xs text-gray-500">
-                      By creating an account, you agree to our Terms & Privacy.
                     </div>
+                  ) : (
+                    <label className="flex items-start gap-3 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        checked={agreeTerms}
+                        onChange={(e) => setAgreeTerms(e.target.checked)}
+                        className="w-4 h-4 mt-0.5 rounded border-gray-300 text-black focus:ring-0 focus:ring-offset-0"
+                      />
+                      <span className="text-sm text-gray-600 group-hover:text-black transition-colors">
+                        I agree to the{' '}
+                        <Link to="/terms-of-service" className="text-black underline hover:no-underline">
+                          Terms of Service
+                        </Link>{' '}
+                        and{' '}
+                        <Link to="/privacy-policy" className="text-black underline hover:no-underline">
+                          Privacy Policy
+                        </Link>
+                      </span>
+                    </label>
                   )}
                 </div>
 
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full bg-black text-white py-4 rounded-2xl hover:bg-gray-800 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
+                  disabled={isLoading || (!isLogin && (!passwordStrength.isStrong || !passwordsMatch || !agreeTerms))}
+                  className="w-full bg-black text-white py-4 rounded-2xl hover:bg-gray-800 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
-                  {isLogin ? 'Sign In' : 'Create Account'}
+                  {isLoading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      {isLogin ? 'Signing in...' : 'Creating account...'}
+                    </span>
+                  ) : (
+                    isLogin ? 'Sign In' : 'Create Account'
+                  )}
                 </button>
               </form>
 
               {/* Toggle Login/Signup */}
               <div className="mt-6 text-center">
                 <button
-                  onClick={() => setIsLogin(!isLogin)}
+                  onClick={() => {
+                    setIsLogin(!isLogin);
+                    setError('');
+                    setPassword('');
+                    setConfirmPassword('');
+                  }}
                   className="text-sm text-gray-500 hover:text-black transition-colors"
                 >
                   {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
@@ -203,17 +467,6 @@ export function ClientLogin() {
               </div>
             </div>
           </div>
-
-          {/* Footer Text */}
-          <p className="text-center text-sm text-gray-500 mt-8">
-            New to Steady Pulse AI?{' '}
-            <button
-              onClick={() => setIsLogin(false)}
-              className="text-black hover:underline"
-            >
-              Contact us to get started (or Register above)
-            </button>
-          </p>
         </div>
       </div>
     </div>

@@ -151,12 +151,12 @@ router.get('/google/callback', async (req, res) => {
 
 // Register (Optional, for admin or seeding)
 router.post('/register', validateRegistrationMiddleware, async (req, res) => {
-    const { email, password, role } = req.body;
+    const { email, password, phone, role } = req.body;
     try {
         let user = await User.findOne({ email });
         if (user) return res.status(400).json({ message: 'User already exists' });
 
-        user = new User({ email, password, role });
+        user = new User({ email, password, phone, role });
 
         // Hash password
         const salt = await bcrypt.genSalt(10);
@@ -164,10 +164,12 @@ router.post('/register', validateRegistrationMiddleware, async (req, res) => {
 
         await user.save();
 
-        const payload = { userId: user._id, role: user.role };
-        const token = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: '1h' });
-
-        res.json({ token, user: { id: user._id, email: user.email, role: user.role } });
+        // Don't auto-login after registration - just return success
+        res.json({ 
+            success: true, 
+            message: 'Account created successfully',
+            user: { id: user._id, email: user.email, role: user.role } 
+        });
     } catch (err) {
         console.error(err);
         res.status(500).send('Server Error');

@@ -27,7 +27,7 @@ export function FloatingWorkflow() {
   return (
     <section id="workflow" className="relative py-40 px-6">
       {/* Gradient Background */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 contain-paint" style={{ willChange: 'transform', transform: 'translateZ(0)' }}>
         <div className="absolute top-1/4 right-0 w-96 h-96 bg-gradient-to-l from-gray-100/40 to-transparent rounded-full blur-3xl"></div>
         <div className="absolute bottom-1/4 left-0 w-96 h-96 bg-gradient-to-r from-gray-100/40 to-transparent rounded-full blur-3xl"></div>
       </div>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowLeft, TrendingUp, Lock, Mail } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { api } from '../lib/api';
+import { ParentCompanyBadge } from './ui/ParentCompanyBadge';
 
 export function ClientLogin() {
   const navigate = useNavigate();
@@ -62,12 +63,15 @@ export function ClientLogin() {
         <div className="w-full max-w-md">
           {/* Logo & Heading */}
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 mb-6 group">
-              <div className="relative">
-                <div className="absolute inset-0 bg-black/5 blur-xl rounded-full"></div>
-                <TrendingUp className="w-8 h-8 relative z-10" />
-              </div>
-              <span className="text-2xl tracking-[-0.02em]">Steady Pulse AI</span>
+            {/* Logo Stack - Vertically Centered */}
+            <div className="flex flex-col items-center mb-8">
+              <img 
+                src="/logo.png" 
+                alt="Steady Pulse AI" 
+                className="h-16 w-auto mb-3 rounded-lg"
+              />
+              <span className="text-2xl tracking-[-0.02em] mb-2">Steady Pulse AI</span>
+              <ParentCompanyBadge variant="light" />
             </div>
             <h1 className="text-4xl md:text-5xl tracking-[-0.03em] mb-3">
               {isLogin ? 'Welcome Back' : 'Create Account'}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ArrowLeft, Shield, Lock, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
+import { ParentCompanyBadge } from './ui/ParentCompanyBadge';
 
 export function AdminLogin() {
   const navigate = useNavigate();
@@ -55,8 +56,15 @@ export function AdminLogin() {
         <div className="w-full max-w-md">
           {/* Logo & Heading */}
           <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 mb-6">
-              <Shield className="w-8 h-8 text-white" />
+            {/* Logo Stack - Vertically Centered */}
+            <div className="flex flex-col items-center mb-8">
+              <img 
+                src="/logo.png" 
+                alt="Steady Pulse AI" 
+                className="h-16 w-auto mb-3 rounded-lg brightness-0 invert"
+              />
+              <span className="text-2xl tracking-[-0.02em] text-white mb-2">Steady Pulse AI</span>
+              <ParentCompanyBadge variant="dark" />
             </div>
             <h1 className="text-4xl md:text-5xl tracking-[-0.03em] mb-3 text-white">
               Admin Access

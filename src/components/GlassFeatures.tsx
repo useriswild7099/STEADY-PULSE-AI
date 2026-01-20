@@ -67,8 +67,11 @@ export function GlassFeatures() {
     <section id="features" className="relative py-24 md:py-40 px-4 md:px-6 perspective-container overflow-hidden">
       {/* Background Gradient */}
       <div 
-        className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-50/30 to-transparent parallax-layer"
-        style={{ transform: `translateY(${scrollParallax.offsetY * -0.5}px)` }}
+        className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-50/30 to-transparent parallax-layer contain-paint"
+        style={{ 
+          transform: `translateY(${scrollParallax.offsetY * -0.5}px) translateZ(0)`,
+          willChange: 'transform'
+        }}
       ></div>
 
       <div className="relative z-10 max-w-7xl mx-auto perspective-container">
@@ -244,7 +247,7 @@ function FeatureCard({ feature, index }: { feature: any, index: number }) {
 
   return (
     <div
-      className="group relative perspective-container"
+      className="group relative perspective-container contain-layout"
       style={{ 
         animationDelay: `${index * 100}ms`,
         ...style 

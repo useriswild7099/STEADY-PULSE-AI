@@ -1,5 +1,6 @@
 import { TrendingUp } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { ParentCompanyBadge } from './ui/ParentCompanyBadge';
 
 const quotes = [
   // 🧠 Technical & AI-Focused
@@ -81,21 +82,29 @@ export function LoadingScreen() {
   return (
     <div className="fixed inset-0 bg-[#FCFCFD] z-50 flex items-center justify-center overflow-hidden">
       {/* Animated Gradient Mesh Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 right-1/3 w-[600px] h-[600px] bg-gradient-to-br from-gray-300/50 via-gray-200/30 to-transparent rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 left-1/3 w-[500px] h-[500px] bg-gradient-to-tl from-gray-200/40 via-transparent to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }}></div>
+      <div className="absolute inset-0 overflow-hidden contain-paint" style={{ willChange: 'transform' }}>
+        <div 
+          className="absolute top-1/4 right-1/3 w-[600px] h-[600px] bg-gradient-to-br from-gray-300/50 via-gray-200/30 to-transparent rounded-full blur-3xl animate-pulse"
+          style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
+        ></div>
+        <div 
+          className="absolute bottom-1/4 left-1/3 w-[500px] h-[500px] bg-gradient-to-tl from-gray-200/40 via-transparent to-transparent rounded-full blur-3xl animate-pulse" 
+          style={{ animationDelay: '1.5s', willChange: 'transform, opacity', transform: 'translateZ(0)' }}
+        ></div>
       </div>
 
       {/* Content */}
       <div className="relative z-10 max-w-2xl mx-auto px-6 text-center">
         {/* Logo with Animation */}
         <div className="mb-12 animate-float">
-          <div className="inline-flex items-center gap-3 backdrop-blur-xl bg-white/60 border border-white/40 rounded-2xl px-6 py-4 shadow-lg">
-            <div className="relative">
-              <div className="absolute inset-0 bg-black/10 blur-xl rounded-full"></div>
-              <TrendingUp className="w-8 h-8 relative z-10" />
-            </div>
-            <span className="text-2xl tracking-[-0.02em]">Steady Pulse AI</span>
+          <div className="flex flex-col items-center backdrop-blur-xl bg-white/60 border border-white/40 rounded-2xl px-8 py-6 shadow-lg">
+            <img 
+              src="/logo.png" 
+              alt="Steady Pulse AI" 
+              className="h-14 w-auto mb-3 rounded-lg"
+            />
+            <span className="text-2xl tracking-[-0.02em] mb-2">Steady Pulse AI</span>
+            <ParentCompanyBadge variant="light" />
           </div>
         </div>
 

@@ -41,9 +41,10 @@ export function AuroraFooter() {
           <div>
             <h3 className="text-white/90 mb-4 tracking-wide">Company</h3>
             <ul className="space-y-3">
+              <li><a href="https://artificialstudio.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-white transition-colors text-sm">Artificial Studio</a></li>
+              <li><a href="https://princeio.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-white transition-colors text-sm">Portfolio</a></li>
               <li><a href="https://www.linkedin.com/in/prince-tigga-95b123324" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-white transition-colors text-sm">About</a></li>
               <li><a href="#" className="text-gray-500 hover:text-white transition-colors text-sm">Blog</a></li>
-              <li><a href="#" className="text-gray-500 hover:text-white transition-colors text-sm">Careers</a></li>
               <li><a href="#" className="text-gray-500 hover:text-white transition-colors text-sm">Contact</a></li>
             </ul>
           </div>
@@ -76,7 +77,7 @@ export function AuroraFooter() {
         {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-gray-500 text-sm">
-            © 2025 Steady Pulse AI. All rights reserved.
+            © 2025 Steady Pulse AI. All rights reserved. | A product of <a href="https://artificialstudio.vercel.app/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Artificial Studio</a>
           </p>
 
           {/* Social Links */}

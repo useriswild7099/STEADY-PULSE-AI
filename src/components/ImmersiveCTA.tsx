@@ -9,8 +9,11 @@ export function ImmersiveCTA() {
     <section className="relative py-40 px-6 overflow-hidden perspective-container">
       {/* Dark Gradient Background */}
       <div 
-        className="absolute inset-0 bg-gradient-to-b from-[#FCFCFD] via-gray-900 to-black parallax-layer"
-        style={{ transform: `scale(1.1) translateY(${scroll.offsetY * 0.2}px)` }}
+        className="absolute inset-0 bg-gradient-to-b from-[#FCFCFD] via-gray-900 to-black parallax-layer contain-paint"
+        style={{ 
+          transform: `scale(1.1) translateY(${scroll.offsetY * 0.2}px) translateZ(0)`,
+          willChange: 'transform'
+        }}
       ></div>
 
       {/* Ambient Glow */}

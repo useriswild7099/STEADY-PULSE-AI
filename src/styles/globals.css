@@ -224,3 +224,86 @@ html.lenis body {
 .lenis.lenis-scrolling iframe {
   pointer-events: none;
 }
+
+/* ============================================
+   GPU Acceleration & Performance Optimizations
+   ============================================ */
+
+/* Force GPU compositing for animated elements */
+.parallax-layer,
+.perspective-container,
+.will-change-transform {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* GPU acceleration for elements with filters */
+.blur-optimized {
+  transform: translateZ(0);
+  will-change: filter, transform;
+}
+
+/* CSS Containment for independent elements */
+.contain-paint {
+  contain: paint;
+}
+
+.contain-layout {
+  contain: layout;
+}
+
+.contain-strict {
+  contain: strict;
+}
+
+/* Optimize animations */
+.animate-pulse,
+.animate-bounce,
+.animate-float {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+/* ============================================
+   Mobile Touch & Scroll Optimizations
+   ============================================ */
+
+@media (max-width: 767px) {
+  /* Smooth touch scrolling */
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Slow down pulse animations to reduce frame rate impact */
+  .animate-pulse {
+    animation-duration: 4s;
+  }
+  
+  /* Reduce animation complexity for better performance */
+  .hover\:-translate-y-1:hover,
+  .hover\:-translate-y-2:hover {
+    transition-duration: 200ms;
+  }
+}
+
+/* ============================================
+   Accessibility: Reduced Motion Support
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse,
+  .animate-bounce,
+  .animate-float,
+  .animate-spin {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  
+  .transition-all,
+  .transition-transform,
+  .transition-opacity {
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -24,9 +24,10 @@ export function AuroraHero() {
     >
       {/* Animated Gradient Mesh Background */}
       <div 
-        className="absolute inset-0 overflow-hidden parallax-layer"
+        className="absolute inset-0 overflow-hidden parallax-layer contain-paint"
         style={{ 
           transform: `translateY(${bgScroll.offsetY * 0.5}px) scale(1.1)`,
+          willChange: 'transform'
         }}
       >
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gradient-to-br from-gray-200/40 via-transparent to-transparent rounded-full blur-3xl animate-pulse delay-75 duration-[4s]"></div>
@@ -78,13 +79,14 @@ export function AuroraHero() {
 
         {/* Floating Glass Card */}
         <div 
-          className="relative max-w-5xl mx-auto parallax-layer will-change-transform"
+          className="relative max-w-5xl mx-auto parallax-layer will-change-transform contain-paint"
           style={{
              transform: `
                perspective(1000px)
                rotateX(${cardParallax.tilt.x}deg)
                rotateY(${cardParallax.tilt.y}deg)
                translateY(${bgScroll.offsetY * -0.1}px)
+               translateZ(0)
              `,
              transition: 'transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
           }}
@@ -159,10 +161,10 @@ export function AuroraHero() {
 
           {/* Floating Accents */}
           <div 
-             className="absolute -top-4 -left-4 sm:-top-6 sm:-left-6 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-white/60 to-transparent backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg parallax-layer hidden sm:flex items-center justify-center overflow-hidden"
+             className="absolute top-0 left-0 sm:-top-2 sm:-left-2 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-white/60 to-transparent backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg parallax-layer hidden sm:flex items-center justify-center overflow-hidden"
              style={{ transform: 'translateZ(40px)' }}
           >
-            <img src={aiBrainImg} alt="AI Intelligence" className="w-full h-full object-cover opacity-90" />
+            <img src={aiBrainImg} alt="AI Intelligence" className="w-full h-full object-cover object-top opacity-90" />
           </div>
           <div 
             className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 w-20 h-20 sm:w-32 sm:h-32 bg-gradient-to-tl from-white/60 to-transparent backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg parallax-layer hidden sm:block"
